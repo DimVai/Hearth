@@ -1,0 +1,343 @@
+/* ============================================
+   CSS LAYERS ORGANIZATION
+   ============================================ */
+
+
+   /* Declare layer order */
+   @layer reset, framework, tokens, base, components, utilities;
+
+   /* Import framework first (must be at the top) */
+   @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css') layer(framework);
+
+
+/* ============================================
+   LAYER: RESET
+   ============================================ */
+
+@layer reset {
+    /* Prevent all non-defined custom elements from displaying */
+    *:not(:defined) {
+        display: none;
+    }
+
+    /* View transition between pages */
+    @view-transition {
+        navigation: auto;
+    }
+}
+
+/* ============================================
+   LAYER: TOKENS
+   ============================================ */
+
+@layer tokens {
+    :root, [data-bs-theme=dark] {
+        /* Brand colours */
+        --color-primary:        hsl(221, 100%, 45%);
+        --color-primary-dark:   hsl(221, 100%, 30%);
+        --color-primary-light:  hsl(221, 100%, 60%);
+        --color-accent:         hsl(32, 100%, 41%);
+        --color-accent-hover:   hsl(36,  100%, 43%);
+
+        /* Surface / background */
+        --bs-body-bg:           hsl(221, 30%, 8%);
+        --color-card-bg:        hsl(221, 25%, 13%);
+        --color-header-bg:      hsl(221, 100%, 18%);
+
+        /* Text */
+        --bs-body-color:        hsl(0, 0%, 88%);
+        --bs-heading-color:     hsl(0, 0%, 97%);
+        --color-body-muted:     hsl(221, 20%, 55%);
+
+        /* Borders */
+        --border-color:         hsl(221, 25%, 22%);
+        --bs-border-color:      hsl(221, 25%, 22%);
+
+        /* Bootstrap overrides */
+        --bs-primary:           var(--color-primary);
+        --bs-primary-rgb:       0, 73, 229;
+        --bs-link-color:        var(--color-primary-light);
+        --bs-link-hover-color:  var(--color-primary-light);
+    }
+}
+
+/* ============================================
+   LAYER: BASE
+   ============================================ */
+
+@layer base {
+    body {
+        color-scheme: dark;
+        background-color: var(--bs-body-bg);
+        color: var(--bs-body-color);
+        /* Mobile-first centered layout */
+        max-width: 500px;
+        margin-inline: auto;
+        min-height: 100dvh;
+        position: relative;
+    }
+
+    h1, h2, h3, h4, h5 {
+        color: var(--bs-heading-color);
+    }
+
+    p {
+        color: var(--bs-body-color);
+        margin-bottom: revert;
+    }
+
+    .btn {
+        font-weight: 500;
+    }
+
+    .btn-primary {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary-dark);
+        color: white;
+        &:hover, &:focus {
+            background-color: var(--color-primary-dark);
+            border-color: var(--color-primary-dark);
+            color: white;
+        }
+    }
+
+    .btn-danger {
+        color: white;
+        background-color: hsl(348, 90%, 38%);
+        border-color: hsl(348, 90%, 28%);
+        &:hover {
+            background-color: hsl(348, 90%, 32%);
+        }
+    }
+
+    .form-control, .form-select {
+        background-color: var(--color-card-bg);
+        border-color: var(--border-color);
+        color: var(--bs-body-color);
+        &:focus {
+            background-color: var(--color-card-bg);
+            border-color: var(--color-primary);
+            color: var(--bs-body-color);
+            box-shadow: 0 0 0 0.2rem hsla(221, 100%, 45%, 0.25);
+        }
+    }
+
+    /* Scrollbars */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: hsl(221, 25%, 10%); }
+    ::-webkit-scrollbar-thumb { background-color: hsl(221, 25%, 30%); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background-color: hsl(221, 25%, 40%); }
+    * { scrollbar-width: thin; scrollbar-color: hsl(221, 25%, 30%) hsl(221, 25%, 10%); }
+}
+
+/* ============================================
+   LAYER: COMPONENTS
+   ============================================ */
+
+@layer components {
+
+    /* ── App header (dashboard) ── */
+    .app-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.6rem 1rem;
+        background-color: var(--color-header-bg);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .app-logo {
+        width: 30px;
+        height: 30px;
+        object-fit: contain;
+    }
+
+    .app-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: white;
+        flex: 1;
+        letter-spacing: 0.02em;
+    }
+
+    /* ── Page header (app/* pages) ── */
+    .page-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background-color: var(--color-header-bg);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .page-header h1 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin: 0;
+        color: white;
+    }
+
+    .page-header .btn-link {
+        color: hsl(221, 100%, 80%);
+        padding-inline: 0.25rem;
+        text-decoration: none;
+        font-size: 1.1rem;
+        &:hover { color: white; }
+    }
+
+    /* ── Main content ── */
+    .main-content {
+        padding: 0.75rem 0.75rem 5rem;
+    }
+
+    /* ── Dashboard sections ── */
+    .dashboard-section {
+        margin-bottom: 1.25rem;
+    }
+
+    .section-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        color: var(--color-body-muted);
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.3rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-title--overdue {
+        color: var(--color-accent);
+        border-bottom-color: hsla(36, 100%, 50%, 0.35);
+    }
+
+    /* ── Connection card ── */
+    .connection-card {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.65rem 0.75rem;
+        margin-bottom: 0.4rem;
+        background-color: var(--color-card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 0.5rem;
+    }
+
+    .connection-card--overdue {
+        border-left: 3px solid var(--color-accent);
+    }
+
+    .connection-card__info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .connection-card__name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--bs-heading-color);
+    }
+
+    .connection-card__meta {
+        font-size: 0.78rem;
+        color: var(--color-body-muted);
+        margin-top: 0.1rem;
+    }
+
+    .connection-card__meta--overdue {
+        color: var(--color-accent);
+    }
+
+    .connection-card__actions {
+        margin: 0.2rem;
+        display: flex;
+        gap: 1rem;
+        flex-shrink: 0;
+    }
+
+    .connection-card__actions .btn {
+        min-width: 3rem;
+        min-height: 3rem;
+        padding: 0.5rem 0.85rem;
+        font-size: 1.05rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+        color: var(--color-body-muted);
+        font-size: 0.85rem;
+        text-align: center;
+        padding: 0.75rem;
+        margin: 0;
+    }
+
+    /* ── Floating action button ── */
+    .fab {
+        position: fixed;
+        bottom: 2rem;
+        /* Center FAB within the 500px body column on any viewport width */
+        right: max(1rem, calc((100vw - 500px) / 2 + 2.5rem));
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        background-color: var(--color-accent);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: 300;
+        line-height: 1;
+        /* padding-bottom: 0.1rem; */
+        text-decoration: none;
+        box-shadow: 0 4px 14px hsla(36, 100%, 50%, 0.4);
+        z-index: 200;
+        transition: background-color 0.15s;
+    }
+
+    .fab:hover {
+        background-color: var(--color-accent-hover);
+        color: white;
+    }
+
+}
+
+/* ============================================
+   LAYER: UTILITIES
+   ============================================ */
+
+@layer utilities {
+
+    .center {
+        display: block;
+        text-align: center;
+        margin-inline: auto;
+    }
+
+    .center-contents {
+        display: grid;
+        place-items: center;
+    }
+
+    .flash {
+        animation: soft-glow 6s ease-in-out;
+    }
+
+    @keyframes soft-glow {
+        0%   { opacity: 1; }
+        25%  { opacity: 0.6; }
+        50%  { opacity: 1; }
+        75%  { opacity: 0.6; }
+        100% { opacity: 1; }
+    }
+}

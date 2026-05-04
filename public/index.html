@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <title>Hearth</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="manifest" href="pwa/manifest.json">
+    <meta name="theme-color" content="#0049e5">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <script defer src="pwa/pwa.js"></script>
+    <script defer src="js/Q.js"></script>
+    <script defer src="js/connection.js"></script>
+    <script defer src="js/network.js"></script>
+    <script defer src="js/script.js"></script>
+</head>
+
+<body data-bs-theme="dark">
+
+    <header class="app-header">
+        <img src="resources/logo.png" alt="Hearth" class="app-logo">
+        <span class="app-title">Hearth</span>
+    </header>
+
+    <main class="main-content">
+
+        <!-- Overdue section — hidden when empty -->
+        <section id="section-overdue" class="dashboard-section d-none">
+            <h2 class="section-title section-title--overdue">Εκπρόθεσμες</h2>
+            <div id="list-overdue"></div>
+        </section>
+
+        <!-- Today section -->
+        <section id="section-today" class="dashboard-section">
+            <h2 class="section-title">Σήμερα</h2>
+            <div id="list-today"></div>
+        </section>
+
+        <!-- Upcoming section -->
+        <section id="section-upcoming" class="dashboard-section">
+            <h2 class="section-title">Επόμενες</h2>
+            <div id="list-upcoming"></div>
+        </section>
+
+    </main>
+
+    <a href="app/add-connection.html" class="fab" aria-label="Προσθήκη επαφής">+</a>
+
+</body>
+</html>

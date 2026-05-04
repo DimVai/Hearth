@@ -1,0 +1,35 @@
+{
+    "id": "Hearth",
+    "name": "Hearth",
+    "short_name": "Hearth",
+    "categories": [
+            "productivity"
+        ],
+    "start_url": "../",
+    "scope": "../",
+    "display": "standalone",    
+    "dir": "ltr",
+    "display_override": [
+        "window-controls-overlay",
+        "fullscreen"
+    ],
+    "background_color": "#0049e5",
+    "theme_color": "#0049e5",
+    "description": "Hearth is a Social Circle Management app. Keep track of your social interactions, manage your relationships, and stay connected with your friends and family.",
+    "orientation": "portrait", 
+    "lang": "en-US",
+    "icons": [
+        {
+            "src": "../pwa/logo-192.png",
+            "type": "image/png",
+            "sizes": "192x192",
+            "purpose": "any"
+        },
+        {
+            "src": "../pwa/logo-512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "any"
+        }
+    ]
+}

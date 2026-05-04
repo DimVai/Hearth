@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <title>Επεξεργασία Επαφής – Hearth</title>
+    <link rel="icon" href="../favicon.ico">
+    <meta name="theme-color" content="#0049e5">
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <script defer src="../js/Q.js"></script>
+    <script defer src="../js/connection.js"></script>
+    <script defer src="../js/network.js"></script>
+    <script defer src="../js/edit-connection.js"></script>
+</head>
+
+<body data-bs-theme="dark">
+
+    <header class="page-header">
+        <a href="../index.html" class="btn btn-link">←</a>
+        <h1>Επεξεργασία Επαφής</h1>
+    </header>
+
+    <main class="main-content">
+        <form id="edit-form" novalidate>
+
+            <div class="mb-3">
+                <label for="name" class="form-label">Όνομα</label>
+                <input type="text" class="form-control" id="name" autocomplete="off" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="frequency" class="form-label">Συχνότητα επικοινωνίας</label>
+                <select class="form-select" id="frequency" required>
+                    <option value="3">Κάθε 3 μέρες</option>
+                    <option value="7">Κάθε εβδομάδα</option>
+                    <option value="14">Κάθε 2 εβδομάδες</option>
+                    <option value="30">Κάθε μήνα</option>
+                    <option value="60">Κάθε 2 μήνες</option>
+                    <option value="90">Κάθε 3 μήνες</option>
+                    <option value="180">Κάθε 6 μήνες</option>
+                    <option value="365">Κάθε χρόνο</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="last-communication" class="form-label">
+                    Τελευταία επικοινωνία
+                    <span class="text-secondary fw-normal">(προαιρετικό)</span>
+                </label>
+                <input type="date" class="form-control" id="last-communication">
+            </div>
+
+            <div class="mb-4">
+                <label for="scheduled-next" class="form-label">
+                    Επόμενη προγραμματισμένη επικοινωνία
+                    <span class="text-secondary fw-normal">(προαιρετικό – κάνει override τη συχνότητα)</span>
+                </label>
+                <input type="date" class="form-control" id="scheduled-next">
+            </div>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary">Αποθήκευση</button>
+                <button type="button" id="delete-btn" class="btn btn-danger">Διαγραφή Επαφής</button>
+            </div>
+
+        </form>
+    </main>
+
+</body>
+</html>
