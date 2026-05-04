@@ -9,14 +9,11 @@
     "scope": "../",
     "display": "standalone",    
     "dir": "ltr",
-    "display_override": [
-        "window-controls-overlay"
-    ],
     "background_color": "#0049e5",
     "theme_color": "#0049e5",
     "description": "Το Hearth είναι μια εφαρμογή για τη διαχείριση του κοινωνικού σου κύκλου. Παρακολούθησε τις κοινωνικές σου επαφές, οργάνωσε τις σχέσεις σου και μείνε συνδεδεμένος/η με φίλους και την οικογένειά σου.",
     "orientation": "portrait", 
-    "lang": "en-US",
+    "lang": "el-GR",
     "icons": [
         {
             "src": "../pwa/logo-192.png",
