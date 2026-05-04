@@ -10,8 +10,7 @@
     "display": "standalone",    
     "dir": "ltr",
     "display_override": [
-        "window-controls-overlay",
-        "fullscreen"
+        "window-controls-overlay"
     ],
     "background_color": "#0049e5",
     "theme_color": "#0049e5",

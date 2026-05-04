@@ -44,7 +44,7 @@
                 </select>
             </div>
 
-            <div class="mb-4">
+            <div class="mb-3">
                 <label for="last-communication" class="form-label">
                     Τελευταία επικοινωνία
                     <span class="text-secondary fw-normal">(προαιρετικό)</span>
@@ -52,8 +52,16 @@
                 <input type="date" class="form-control" id="last-communication">
             </div>
 
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">Αποθήκευση</button>
+            <div class="mb-4">
+                <label for="scheduled-next" class="form-label">
+                    Επόμενη προγραμματισμένη επικοινωνία
+                    <span class="text-secondary fw-normal">(προαιρετικό – κάνει override τη συχνότητα)</span>
+                </label>
+                <input type="date" class="form-control" id="scheduled-next">
+            </div>
+
+            <div class="d-grid mt-5">
+                <button type="submit" class="btn btn-primary btn-lg">Αποθήκευση</button>
             </div>
 
         </form>
