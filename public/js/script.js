@@ -41,16 +41,17 @@ function buildCard(conn) {
     const freqLabel = formatFrequency(conn.communicationFrequencyDays);
     const overdueCls = conn.isOverdue ? ' connection-card--overdue' : '';
     const metaCls    = conn.isOverdue ? ' connection-card__meta--overdue' : '';
+    const editHref = `app/edit-connection.html?id=${escapeHtml(conn.id)}`;
     return `
 <div class="connection-card${overdueCls}" data-id="${escapeHtml(conn.id)}">
     <div class="connection-card__info">
-        <div class="connection-card__name">${escapeHtml(conn.name)}</div>
+        <a href="${editHref}" class="connection-card__name" title="Επεξεργασία">${escapeHtml(conn.name)}</a>
         <div class="connection-card__meta${metaCls}">${daysLabel}<br>${freqLabel}</div>
     </div>
     <div class="connection-card__actions">
         <button class="btn btn-success btn-done" title="Πραγματοποιήθηκε">✓</button>
         <button class="btn btn-outline-secondary btn-postpone" title="Αναβολή για αύριο">+1</button>
-        <a href="app/edit-connection.html?id=${escapeHtml(conn.id)}" class="btn btn-outline-primary" title="Επεξεργασία">✎</a>
+        <a href="${editHref}" class="btn btn-outline-primary" title="Επεξεργασία">✎</a>
     </div>
 </div>`.trim();
 }

@@ -56,19 +56,13 @@ class Network {
         return true;
     }
 
-    /**
-     * Mark as communicated today.
-     * Clears scheduledNextCommunicationDate only if it was today or already past.
-     */
+    /** Mark as communicated today and clear any scheduled override. */
     markCommunicated(id) {
         const conn = this.getConnection(id);
         if (!conn) return null;
-        const today = Connection._today();
-        const clearScheduled = !conn.scheduledNextCommunicationDate
-            || conn.scheduledNextCommunicationDate <= today;
         return this.updateConnection(id, {
-            lastCommunicationDate: today,
-            scheduledNextCommunicationDate: clearScheduled ? null : conn.scheduledNextCommunicationDate
+            lastCommunicationDate: Connection._today(),
+            scheduledNextCommunicationDate: null
         });
     }
 

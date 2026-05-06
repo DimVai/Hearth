@@ -98,8 +98,7 @@ Business rules που υλοποιεί:
 
 - `markCommunicated(id)`
   - βάζει `lastCommunicationDate` = σήμερα
-  - καθαρίζει το `scheduledNextCommunicationDate` μόνο αν είναι σήμερα ή έχει ήδη περάσει
-  - αν η προγραμματισμένη ημερομηνία είναι στο μέλλον, την κρατάει
+  - καθαρίζει πάντα το `scheduledNextCommunicationDate`
 - `postponeToTomorrow(id)`
   - βάζει `scheduledNextCommunicationDate` = αύριο
   - αυτό κάνει override την ημερομηνία που θα προέκυπτε από τη συχνότητα
@@ -166,6 +165,7 @@ Dashboard actions:
 
 - `✓` κουμπί: καλεί `network.markCommunicated(id)` και κάνει rerender
 - `+1` κουμπί: καλεί `network.postponeToTomorrow(id)` και κάνει rerender
+- το όνομα της επαφής είναι link προς edit page
 - `✎` link: πηγαίνει στη σελίδα επεξεργασίας με query parameter `?id=...`
 
 Το overdue section κρύβεται τελείως όταν δεν έχει items.
