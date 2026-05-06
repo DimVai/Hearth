@@ -102,3 +102,4 @@ Q('.btn-postpone').on('click', function() {
 // ── Init ──────────────────────────────────────────────────────────────────────
 
 renderDashboard();
+NotificationManager.init(network);

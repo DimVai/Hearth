@@ -71,4 +71,10 @@ class Network {
         const tomorrow = Connection._addDays(Connection._today(), 1);
         return this.updateConnection(id, { scheduledNextCommunicationDate: tomorrow });
     }
+
+    /** Returns connections whose next communication date is today or overdue. */
+    getDueConnections() {
+        const today = Connection._today();
+        return this._connections.filter(c => c.nextCommunication <= today);
+    }
 }

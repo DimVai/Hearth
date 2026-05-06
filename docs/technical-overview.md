@@ -237,9 +237,75 @@ Format που χρησιμοποιείται παντού:
 
 - manifest: metadata και icons
 - pwa.js: registration του service worker
-- service-worker.js: caching strategy για offline shell
+- service-worker.js: caching strategy για offline shell + notification handlers
 
-## 12. Τρέχοντα όρια της υλοποίησης
+## 12. Local Push Notifications
+
+Η εφαρμογή υποστηρίζει ημερήσιες τοπικές υπενθυμίσεις για εκκρεμείς επικοινωνίες. Δεν υπάρχει server — όλα τρέχουν στη συσκευή.
+
+### Αρχεία notification layer
+
+- [public/js/notifications/notification-settings.js](../public/js/notifications/notification-settings.js): persistence για reminder time και dedupe state.
+- [public/js/notifications/notification-manager.js](../public/js/notifications/notification-manager.js): page-side orchestration — permission flow, sync προς SW, λήψη μηνυμάτων από SW.
+- [public/service-worker.js](../public/service-worker.js): background handlers (message, periodicsync, notificationclick).
+
+### localStorage key για notification settings
+
+- `hearth_notification_settings`
+
+Μορφή:
+```json
+{
+  "reminderHour": 10,
+  "reminderMinute": 0,
+  "lastNotifiedDate": "2026-05-07"
+}
+```
+
+- `reminderHour` / `reminderMinute`: ώρα ημερήσιας υπενθύμισης. Default: 10:00. Μελλοντικά user setting.
+- `lastNotifiedDate`: τελευταία ημέρα που εμφανίστηκε notification. Χρησιμοποιείται για deduplicate (μία φορά ανά ημέρα).
+
+### SW-side cache για notification state
+
+Ο service worker αποθηκεύει το τελευταίο snapshot σε ξεχωριστό Cache API bucket:
+
+- Bucket name: `hearth-notif-state-v1`
+- Cache key: `state`
+- Μορφή: αντικείμενο με `dueConnections`, `reminderHour`, `reminderMinute`, `lastNotifiedDate`.
+
+Αυτό επιτρέπει στον SW να ελέγξει αν πρέπει να στείλει notification ακόμα και χωρίς ανοιχτή σελίδα.
+
+### Flow
+
+1. Το dashboard φορτώνει → `NotificationManager.init(network)` καλείται από `script.js`.
+2. Αν permission `granted`: ο manager στέλνει `SYNC_NOTIFICATIONS` message στον SW με:
+   - `dueConnections`: επαφές με `nextCommunication <= today` (από `network.getDueConnections()`).
+   - `reminderHour`, `reminderMinute`, `lastNotifiedDate`.
+3. Ο SW αποθηκεύει το state στο Cache API.
+4. Ο SW ελέγχει αν:
+   - υπάρχουν due connections
+   - δεν έχει ειδοποιήσει ήδη σήμερα (`lastNotifiedDate !== today`)
+   - η τοπική ώρα έχει περάσει την ώρα της υπενθύμισης
+5. Αν ναι: `showNotification()` → αποθήκευση `lastNotifiedDate` → μήνυμα `NOTIFICATION_SHOWN` στις ανοιχτές σελίδες → σελίδα αποθηκεύει στο `localStorage`.
+6. Ο manager συγχρονίζει ξανά και όταν η εφαρμογή επανέρχεται σε foreground (`visibilitychange`).
+
+### Periodic Background Sync
+
+Αν ο browser υποστηρίζει Periodic Background Sync (Chromium-based, installed PWA):
+- Εγγράφεται το tag `hearth-daily-reminder` με `minInterval: 12h`.
+- Ο SW αφυπνίζεται από τον browser και ελέγχει αν πρέπει να στείλει notification.
+
+Αν δεν υποστηρίζεται (Firefox, Safari), η ειδοποίηση θα γίνει την επόμενη φορά που ο χρήστης ανοίξει την εφαρμογή μετά την ώρα υπενθύμισης.
+
+### Permission banner
+
+Το dashboard (`index.html`) εμφανίζει μικρό banner όταν η άδεια δεν έχει δοθεί ακόμα (`Notification.permission === 'default'`). Εξαφανίζεται μόλις ο χρήστης αποφασίσει (granted ή denied).
+
+### Reusable business API
+
+- `network.getDueConnections()`: επιστρέφει τις επαφές με `nextCommunication <= today`. Χρησιμοποιείται αποκλειστικά από τον notification layer (ο dashboard κώδικας υπολογίζει overdue/today/upcoming ανεξάρτητα).
+
+## 13. Τρέχοντα όρια της υλοποίησης
 
 Αυτή τη στιγμή η υλοποίηση:
 
@@ -249,8 +315,9 @@ Format που χρησιμοποιείται παντού:
 - δεν έχει categories ή tags
 - δεν έχει form validation πέρα από βασικούς ελέγχους presence
 - δεν έχει automated tests
+- η ώρα υπενθύμισης (default 10:00) δεν είναι ακόμα user setting — το storage shape είναι έτοιμο για αυτή την επέκταση
 
-## 13. Αν θέλεις να κάνεις extend το app
+## 14. Αν θέλεις να κάνεις extend το app
 
 Τα πιο φυσικά σημεία επέκτασης είναι:
 
@@ -258,4 +325,5 @@ Format που χρησιμοποιείται παντού:
 - versioning ή migration του storage format
 - abstraction layer πάνω από `Network` για μελλοντικό Firestore sync
 - shared utility για validation/date formatting
+- settings page για `reminderHour`/`reminderMinute` (το `NotificationSettings.save()` είναι έτοιμο)
 - περισσότερα dashboard filters ή sorting options
