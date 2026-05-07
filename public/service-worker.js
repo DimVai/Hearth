@@ -22,10 +22,14 @@ self.addEventListener('activate', event => {
 
 //********************            CACHING STRATEGY            //********************
 
-// prefer internet on everything (use cache only when offline)
+// prefer cache but fetch new pages in the background
+// ignoreSearch: true → query params (e.g. ?id=...) are ignored during cache lookup,
+// so edit-connection.html?id=abc is served from the same cache entry as edit-connection.html
 workbox.routing.registerRoute(
     new RegExp('.*'),   // everything
-    new workbox.strategies.NetworkFirst() 
+    new workbox.strategies.StaleWhileRevalidate({
+        matchOptions: { ignoreSearch: true },
+    }),
 );
 
 
