@@ -23,15 +23,11 @@ const NotificationManager = {
         NotificationManager._network = network;
 
         if (!('Notification' in window) || !('serviceWorker' in navigator)) {
-            NotificationManager._hideBanner();
             return;
         }
 
-        // Wire the permission banner button (only present in index.html)
-        const btn = document.getElementById('btn-enable-notifications');
-        if (btn) {
-            btn.addEventListener('click', () => NotificationManager.requestPermission());
-        }
+        // Only proceed if the user has enabled notifications in settings
+        if (!NotificationSettings.get().enabled) return;
 
         const reg = await navigator.serviceWorker.ready.catch(() => null);
         if (!reg) return;
@@ -47,15 +43,12 @@ const NotificationManager = {
         });
 
         if (Notification.permission === 'granted') {
-            NotificationManager._hideBanner();
             NotificationManager._sync(reg);
             await NotificationManager._registerPeriodicSync(reg);
         } else if (Notification.permission === 'denied') {
-            // User has permanently blocked — nothing we can do, hide the banner
-            NotificationManager._hideBanner();
+            // User has permanently blocked — nothing we can do
         } else {
-            // Permission not yet decided — show the banner
-            NotificationManager._showBanner();
+            // Permission not yet decided — handled via settings page
         }
     },
 

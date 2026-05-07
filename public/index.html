@@ -24,15 +24,10 @@
     <header class="app-header">
         <img src="resources/logo.png" alt="Hearth" class="app-logo">
         <span class="app-title">Hearth</span>
+        <a href="app/settings.html" class="header-icon-btn" aria-label="Ρυθμίσεις">
+            <i class="bi bi-gear-fill" aria-hidden="true"></i>
+        </a>
     </header>
-
-    <!-- Notification permission banner — shown only when permission is 'default' -->
-    <div id="notif-permission-banner" class="d-none">
-        <div class="d-flex align-items-center gap-3 px-3 py-2" style="background-color:hsl(221,30%,12%);border-bottom:1px solid var(--border-color);">
-            <small class="flex-grow-1" style="color:var(--bs-body-color);">Ενεργοποίησε τις ειδοποιήσεις για ημερήσιες υπενθυμίσεις.</small>
-            <button type="button" id="btn-enable-notifications" class="btn btn-sm btn-outline-primary flex-shrink-0">Ενεργοποίηση</button>
-        </div>
-    </div>
 
     <main class="main-content">
 
@@ -56,7 +51,9 @@
 
     </main>
 
-    <a href="app/add-connection.html" class="fab" aria-label="Προσθήκη επαφής">+</a>
+    <a href="app/add-connection.html" class="fab" aria-label="Προσθήκη επαφής">
+        <i class="bi bi-plus"></i>
+    </a>
 
 </body>
 </html>

@@ -49,7 +49,7 @@ const singleDOMObjectHandler = {
     set(target, prop, value) {
         if (prop in target) {
             target[prop] = value;
-            return value;
+            return true;    // must not return false ever, otherwise it will throw an error in strict mode.
         }
         return false;
     }

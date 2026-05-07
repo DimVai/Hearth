@@ -18,12 +18,13 @@ class NotificationSettings {
             const raw = localStorage.getItem(NotificationSettings.STORAGE_KEY);
             const saved = raw ? JSON.parse(raw) : {};
             return {
+                enabled:           saved.enabled           ?? false,
                 reminderHour:      saved.reminderHour      ?? 10,
                 reminderMinute:    saved.reminderMinute    ?? 0,
                 lastNotifiedDate:  saved.lastNotifiedDate  ?? null
             };
         } catch {
-            return { reminderHour: 10, reminderMinute: 0, lastNotifiedDate: null };
+            return { enabled: false, reminderHour: 10, reminderMinute: 0, lastNotifiedDate: null };
         }
     }
 

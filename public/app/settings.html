@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <title>Ρυθμίσεις – Hearth</title>
+    <link rel="icon" href="../favicon.ico">
+    <meta name="theme-color" content="#0049e5">
+
+    <link rel="stylesheet" href="../css/style.css">
+
+    <script defer src="../js/Q.js"></script>
+    <script defer src="../js/notifications/notification-settings.js"></script>
+    <script defer src="../js/settings.js"></script>
+</head>
+
+<body data-bs-theme="dark">
+
+    <header class="page-header">
+        <a href="../index.html" class="btn btn-link"><i class="bi bi-arrow-return-left"></i></a>
+        <h1>Ρυθμίσεις</h1>
+    </header>
+
+    <main class="main-content p-3">
+
+        <p class="text-uppercase fw-semibold mb-2" style="font-size: 0.7rem; letter-spacing: 0.08em; color: var(--color-body-muted);">Ειδοποιήσεις</p>
+
+        <div class="rounded-3 overflow-hidden mb-4" style="border: 1px solid var(--border-color);">
+
+            <!-- Checkbox row -->
+            <div class="d-flex align-items-center justify-content-between px-3 py-3" style="background: var(--color-card-bg);">
+                <label class="form-check-label" for="notif-enabled">Ενεργοποίηση</label>
+                <div class="form-check form-switch mb-0">
+                    <input class="form-check-input" type="checkbox" role="switch" id="notif-enabled">
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div style="height: 1px; background: var(--border-color);"></div>
+
+            <!-- Time select row -->
+            <div class="d-flex align-items-center justify-content-between px-3 py-2" style="background: var(--color-card-bg);">
+                <label class="form-label mb-0 me-3" for="notif-time">Ώρα ειδοποίησης</label>
+                <select class="form-select form-select-sm w-auto" id="notif-time">
+                    <option value="10">10:00</option>
+                    <option value="12">12:00</option>
+                    <option value="14">14:00</option>
+                </select>
+            </div>
+
+        </div>
+
+        <!-- Permission banner — shown only when enabled and permission is 'default' -->
+        <div id="notif-permission-banner" class="d-none">
+            <div class="d-flex align-items-center gap-3 rounded-3 p-3" style="background: var(--color-card-bg); border: 1px solid var(--border-color);">
+                <i class="bi bi-bell-fill flex-shrink-0" style="color: var(--color-accent);"></i>
+                <small class="flex-grow-1">Για να λαμβάνεις ειδοποιήσεις, δώσε άδεια στον browser.</small>
+                <button type="button" id="btn-enable-notifications" class="btn btn-sm btn-primary flex-shrink-0">Ενεργοποίηση</button>
+            </div>
+        </div>
+
+        <!-- Warning — shown when notifications are blocked or unsupported -->
+        <div id="notif-warning" class="d-none">
+            <div class="d-flex align-items-start gap-3 rounded-3 p-3" style="background: var(--color-card-bg); border: 1px solid var(--border-color);">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 mt-1" style="color: var(--color-accent);"></i>
+                <small id="notif-warning-text" class="flex-grow-1"></small>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+</html>
