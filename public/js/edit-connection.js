@@ -31,11 +31,9 @@ if (!freqSelect.value) {
     freqSelect.value = connection.communicationFrequencyDays;
 }
 
-// ── Save ──────────────────────────────────────────────────────────────────────
+// ── Auto-save ────────────────────────────────────────────────────────────────
 
-Q('#edit-form').on('submit', function(e) {
-    e.preventDefault();
-
+function saveChanges() {
     const name = Q('#name').element.value.trim();
     const communicationFrequencyDays = Number(Q('#frequency').element.value);
     const lastCommunicationDate = Q('#last-communication').element.value || null;
@@ -49,8 +47,12 @@ Q('#edit-form').on('submit', function(e) {
         lastCommunicationDate,
         scheduledNextCommunicationDate
     });
-    window.location.href = '../index.html';
-});
+}
+
+Q('#name').on('change', saveChanges);
+Q('#frequency').on('change', saveChanges);
+Q('#last-communication').on('change', saveChanges);
+Q('#scheduled-next').on('change', saveChanges);
 
 // ── Delete ────────────────────────────────────────────────────────────────────
 
