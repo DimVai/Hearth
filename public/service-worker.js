@@ -15,6 +15,7 @@ self.addEventListener('install', event => { self.skipWaiting() });
 
 // notify when the new updated service worker (this file) gets activated
 self.addEventListener('activate', event => { 
+    event.waitUntil(self.clients.claim());  // να εφαρμοστεί και στις ανοιχτές σελίδες, όχι μόνο όταν ανοίξουν ξανά
     console.debug('service worker activated', event);
 });
 
@@ -22,12 +23,12 @@ self.addEventListener('activate', event => {
 
 //********************            CACHING STRATEGY            //********************
 
-// prefer cache but fetch new pages in the background
-// ignoreSearch: true → query params (e.g. ?id=...) are ignored during cache lookup,
-// so edit-connection.html?id=abc is served from the same cache entry as edit-connection.html
+// Prefer the network for every request, then fall back to cache.
+// ignoreSearch: true keeps offline fallback working for routes like edit-connection.html?id=abc.
 workbox.routing.registerRoute(
     new RegExp('.*'),   // everything
-    new workbox.strategies.StaleWhileRevalidate({
+    new workbox.strategies.NetworkFirst({
+        networkTimeoutSeconds: 3,
         matchOptions: { ignoreSearch: true },
     }),
 );

@@ -237,7 +237,7 @@ Format που χρησιμοποιείται παντού:
 
 - manifest: metadata και icons
 - pwa.js: registration του service worker
-- service-worker.js: caching strategy για offline shell + notification handlers
+- service-worker.js: network-first caching για όλα τα requests του app, με fallback σε cache, και notification handlers
 
 ## 12. Local Push Notifications
 
@@ -300,6 +300,15 @@ Format που χρησιμοποιείται παντού:
 ### Permission banner
 
 Το dashboard (`index.html`) εμφανίζει μικρό banner όταν η άδεια δεν έχει δοθεί ακόμα (`Notification.permission === 'default'`). Εξαφανίζεται μόλις ο χρήστης αποφασίσει (granted ή denied).
+
+### Settings page cache reset
+
+Η σελίδα ρυθμίσεων περιλαμβάνει και χειροκίνητο `Καθαρισμός cache` action:
+
+- Σβήνει όλα τα Cache API buckets του app εκτός από το `hearth-notif-state-v1`.
+- Καλεί `registration.update()` στα διαθέσιμα service worker registrations.
+- Κάνει refresh τη σελίδα ώστε το app shell να ξαναζητηθεί από το δίκτυο.
+- Δεν επηρεάζει `localStorage`, άρα δεν διαγράφει connections ή notification settings.
 
 ### Reusable business API
 

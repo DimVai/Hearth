@@ -1,5 +1,7 @@
 'use strict';
 
+const notificationStateCacheName = 'hearth-notif-state-v1';
+
 // ── Init ─────────────────────────────────────────────────────────────────────
 
 function initUI() {
@@ -46,6 +48,28 @@ function updateBannerVisibility() {
     Q('#notif-permission-banner').show(enabled && permission === 'default');
 }
 
+function setCacheStatus(message, isError = false) {
+    const statusEl = Q('#clear-cache-status');
+    statusEl.set(message);
+    statusEl.element.style.color = isError ? 'var(--bs-danger)' : 'var(--color-body-muted)';
+}
+
+async function clearRuntimeCaches() {
+    if (!('caches' in window)) {
+        throw new Error('cache-api-unavailable');
+    }
+
+    const cacheNames = await caches.keys();
+    const cacheNamesToDelete = cacheNames.filter(name => name !== notificationStateCacheName);
+
+    await Promise.all(cacheNamesToDelete.map(name => caches.delete(name)));
+
+    if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(registration => registration.update().catch(() => undefined)));
+    }
+}
+
 // ── Event listeners ───────────────────────────────────────────────────────────
 
 Q('#notif-enabled').on('change', () => {
@@ -63,6 +87,22 @@ Q('#btn-enable-notifications').on('click', async () => {
     if (!('Notification' in window)) return;
     await Notification.requestPermission();
     updateBannerVisibility();
+});
+
+Q('#clear-cache-btn').on('click', async function() {
+    if (!confirm('Να καθαριστεί η cache της εφαρμογής; Στο επόμενο refresh τα αρχεία θα κατέβουν ξανά.')) return;
+
+    this.disabled = true;
+    setCacheStatus('Καθαρισμός cache...');
+
+    try {
+        await clearRuntimeCaches();
+        setCacheStatus('Η cache καθαρίστηκε. Γίνεται refresh...');
+        window.location.reload();
+    } catch {
+        this.disabled = false;
+        setCacheStatus('Δεν ήταν δυνατό να καθαριστεί η cache σε αυτό το περιβάλλον.', true);
+    }
 });
 
 // ── Start ─────────────────────────────────────────────────────────────────────

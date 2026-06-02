@@ -49,10 +49,9 @@ function saveChanges() {
     });
 }
 
-Q('#name').on('change', saveChanges);
-Q('#frequency').on('change', saveChanges);
-Q('#last-communication').on('change', saveChanges);
-Q('#scheduled-next').on('change', saveChanges);
+Q('.form-control').on('change', saveChanges);
+Q('.form-select').on('change', saveChanges);
+
 
 // ── Delete ────────────────────────────────────────────────────────────────────
 
