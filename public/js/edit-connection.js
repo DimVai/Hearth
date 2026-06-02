@@ -2,17 +2,15 @@
 
 const network = new Network();
 const connectionId = Q.url.get('id');
-
-// Redirect if no valid connection ID
 if (!connectionId) {
-    window.location.replace('../index.html');
+    throw new Error('Missing connection id');
 }
 
 const connection = network.getConnection(connectionId);
-
 if (!connection) {
-    window.location.replace('../index.html');
+    throw new Error(`Connection not found: ${connectionId}`);
 }
+
 
 // ── Populate form ─────────────────────────────────────────────────────────────
 

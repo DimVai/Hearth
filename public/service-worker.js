@@ -5,7 +5,7 @@
 //********************      BASIC VANILLA SERVICE WORKER      //********************
 
 // import Workbox
-self.importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js');
+self.importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.4.1/workbox-sw.js');
 
 // disable console logs
 workbox.setConfig({ debug: false });   
@@ -27,8 +27,8 @@ self.addEventListener('activate', event => {
 // ignoreSearch: true keeps offline fallback working for routes like edit-connection.html?id=abc.
 workbox.routing.registerRoute(
     new RegExp('.*'),   // everything
-    new workbox.strategies.NetworkFirst({
-        networkTimeoutSeconds: 3,
+    new workbox.strategies.staleWhileRevalidate({
+        // networkTimeoutSeconds: 3,
         matchOptions: { ignoreSearch: true },
     }),
 );

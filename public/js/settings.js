@@ -89,7 +89,7 @@ Q('#btn-enable-notifications').on('click', async () => {
     updateBannerVisibility();
 });
 
-Q('#clear-cache-btn').on('click', async function() {
+Q('#clear-cache-btn')?.on('click', async function() {
     if (!confirm('Να καθαριστεί η cache της εφαρμογής; Στο επόμενο refresh τα αρχεία θα κατέβουν ξανά.')) return;
 
     this.disabled = true;
