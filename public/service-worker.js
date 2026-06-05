@@ -27,7 +27,7 @@ self.addEventListener('activate', event => {
 // ignoreSearch: true keeps offline fallback working for routes like edit-connection.html?id=abc.
 workbox.routing.registerRoute(
     new RegExp('.*'),   // everything
-    new workbox.strategies.StaleWhileRevalidate({
+    new workbox.strategies.NetworkFirst({
         // networkTimeoutSeconds: 3,
         matchOptions: { ignoreSearch: true },
     }),
