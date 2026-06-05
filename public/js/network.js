@@ -72,6 +72,14 @@ class Network {
         return this.updateConnection(id, { scheduledNextCommunicationDate: tomorrow });
     }
 
+    /** Push next communication one day forward from its current scheduled date. */
+    postponeByOneDay(id) {
+        const conn = this.getConnection(id);
+        if (!conn) return;
+        const newDate = Connection._addDays(conn.nextCommunication, 1);
+        return this.updateConnection(id, { scheduledNextCommunicationDate: newDate });
+    }
+
     /** Returns connections whose next communication date is today or overdue. */
     getDueConnections() {
         const today = Connection._today();

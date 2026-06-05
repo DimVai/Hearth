@@ -50,7 +50,7 @@ function buildCard(conn) {
     </div>
     <div class="connection-card__actions">
         <button class="btn btn-success btn-done" title="Πραγματοποιήθηκε"><i class="bi bi-check2-square"></i></button>
-        <button class="btn btn-outline-secondary btn-postpone" title="Αναβολή για αύριο">+1</button>
+        <button class="btn btn-outline-secondary btn-postpone" title="Αναβολή για μια μέρα αργότερα">+1</button>
         <a href="${editHref}" class="btn btn-outline-primary" title="Επεξεργασία"><i class="bi bi-pencil"></i></a>
     </div>
 </div>`.trim();
@@ -67,19 +67,27 @@ function renderList(listId, connections) {
 
 // ── Dashboard render ─────────────────────────────────────────────────────────
 
+const SOON_DAYS = 2; // επαφές με επόμενη επικοινωνία από αύριο έως σήμερα + SOON_DAYS
+
 function renderDashboard() {
     const all = network.getConnections()
         .sort((a, b) => a.nextCommunication.localeCompare(b.nextCommunication));
 
     const overdue  = all.filter(c => c.isOverdue);
     const today    = all.filter(c => c.isToday);
-    const upcoming = all.filter(c => !c.isOverdue && !c.isToday);
+    const soon     = all.filter(c => !c.isOverdue && !c.isToday && c.daysUntilNext >= 1 && c.daysUntilNext <= SOON_DAYS);
+    const upcoming = all.filter(c => !c.isOverdue && !c.isToday && c.daysUntilNext > SOON_DAYS);
 
     // Overdue section — hide when empty
     Q('#section-overdue').show(overdue.length > 0);
     if (overdue.length > 0) renderList('#list-overdue', overdue);
 
-    renderList('#list-today',    today);
+    renderList('#list-today', today);
+
+    // Soon section — hide when empty
+    Q('#section-soon').show(soon.length > 0);
+    if (soon.length > 0) renderList('#list-soon', soon);
+
     renderList('#list-upcoming', upcoming);
 }
 
@@ -95,7 +103,13 @@ Q('.btn-done').on('click', function() {
 Q('.btn-postpone').on('click', function() {
     const id = this.closest('.connection-card')?.dataset.id;
     if (!id) return;
-    network.postponeToTomorrow(id);
+    const conn = network.getConnection(id);
+    if (!conn) return;
+    if (conn.isOverdue || conn.isToday) {
+        network.postponeToTomorrow(id);
+    } else {
+        network.postponeByOneDay(id);
+    }
     renderDashboard();
 });
 

@@ -50,6 +50,26 @@ function saveChanges() {
 Q('.form-control').on('change', saveChanges);
 Q('.form-select').on('change', saveChanges);
 
+// ── Scheduled-next quick buttons ─────────────────────────────────────────────
+
+const schedNextEl = Q('#scheduled-next').element;
+
+Q('#sched-today').on('click', function() {
+    schedNextEl.value = Connection._today();
+    saveChanges();
+});
+
+Q('#sched-tomorrow').on('click', function() {
+    schedNextEl.value = Connection._addDays(Connection._today(), 1);
+    saveChanges();
+});
+
+Q('#sched-plus1').on('click', function() {
+    const base = schedNextEl.value || Connection._today();
+    schedNextEl.value = Connection._addDays(base, 1);
+    saveChanges();
+});
+
 
 // ── Delete ────────────────────────────────────────────────────────────────────
 
