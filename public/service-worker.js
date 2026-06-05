@@ -28,7 +28,7 @@ const _ASSETS_CACHE = 'hearth-assets-v1';
 const _EXTERNAL_ASSETS_CACHE = 'hearth-external-assets-v1';
 
 /** Αποθηκεύει μόνο το pathname ως κλειδί cache, χωρίς τα query parameters */
-function createPathnameOnlyCacheKeyPlugin() {
+function useOnlyPathname() {
     return {
         cacheKeyWillBeUsed: async ({ request }) => {
             const url = new URL(request.url);
@@ -38,22 +38,22 @@ function createPathnameOnlyCacheKeyPlugin() {
     };
 }
 
-// Prefer the network for same-origin pages, then fall back to a cached HTML shell.
+// Prefer the network for same-origin PAGES, then fall back to a cached HTML shell.
 // Navigation requests are cached by pathname so routes like edit-connection.html?id=abc
-// and edit-connection.html?id=xyz reuse the same offline page shell.
+// and edit-connection.html?id=xyz reuse the same offline page shell: edit-connection.html
 workbox.routing.registerRoute(
     ({ request, sameOrigin }) => sameOrigin && request.mode === 'navigate',
-    new workbox.strategies.NetworkFirst({
+    new workbox.strategies.StaleWhileRevalidate({
         cacheName: _PAGES_CACHE,
         networkTimeoutSeconds: 3,
-        plugins: [createPathnameOnlyCacheKeyPlugin()],
+        plugins: [useOnlyPathname()],
     }),
 );
 
-// For other same-origin assets (non-pages), keep exact request URLs as cache keys.
+// For other same-origin ASSETS (non-pages), keep exact request URLs as cache keys.
 workbox.routing.registerRoute(
     ({ sameOrigin }) => sameOrigin,
-    new workbox.strategies.NetworkFirst({
+    new workbox.strategies.StaleWhileRevalidate({
         cacheName: _ASSETS_CACHE,
         networkTimeoutSeconds: 3,
     }),
@@ -65,6 +65,7 @@ workbox.routing.registerRoute(
     ({ sameOrigin }) => !sameOrigin,
     new workbox.strategies.StaleWhileRevalidate({
         cacheName: _EXTERNAL_ASSETS_CACHE,
+        networkTimeoutSeconds: 3,
     }),
 );
 
