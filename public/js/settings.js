@@ -1,7 +1,7 @@
 'use strict';
 
 const notificationStateCacheName = 'hearth-notif-state-v1';
-const runtimeCacheNames = ['hearth-pages-v1', 'hearth-assets-v1'];
+const runtimeCacheNames = ['hearth-pages-v1', 'hearth-assets-v1', 'hearth-external-assets-v1'];
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 

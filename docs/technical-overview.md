@@ -237,7 +237,7 @@ Format που χρησιμοποιείται παντού:
 
 - manifest: metadata και icons
 - pwa.js: registration του service worker
-- service-worker.js: network-first caching με ξεχωριστό handling για navigations. Τα HTML pages γίνονται cache by pathname χωρίς query string ώστε routes όπως `edit-connection.html?id=abc` και `edit-connection.html?id=xyz` να μοιράζονται το ίδιο offline shell. Τα pages και assets γράφονται σε app-specific caches (`hearth-pages-v1`, `hearth-assets-v1`) ώστε reset actions να επηρεάζουν μόνο το Hearth. Περιλαμβάνει επίσης notification handlers.
+- service-worker.js: network-first caching με ξεχωριστό handling για navigations. Τα HTML pages γίνονται cache by pathname χωρίς query string ώστε routes όπως `edit-connection.html?id=abc` και `edit-connection.html?id=xyz` να μοιράζονται το ίδιο offline shell. Τα same-origin pages και assets γράφονται σε app-specific caches (`hearth-pages-v1`, `hearth-assets-v1`), ενώ τα υπόλοιπα requests περνούν από `StaleWhileRevalidate` σε ξεχωριστό bucket (`hearth-external-assets-v1`). Κάνει επίσης import του SW-side notification module.
 
 ## 12. Local Push Notifications
 
@@ -247,7 +247,8 @@ Format που χρησιμοποιείται παντού:
 
 - [public/js/notifications/notification-settings.js](../public/js/notifications/notification-settings.js): persistence για reminder time και dedupe state.
 - [public/js/notifications/notification-manager.js](../public/js/notifications/notification-manager.js): page-side orchestration — permission flow, sync προς SW, λήψη μηνυμάτων από SW.
-- [public/service-worker.js](../public/service-worker.js): background handlers (message, periodicsync, notificationclick).
+- [public/service-worker.js](../public/service-worker.js): SW entry point για caching strategy και import των background notification handlers.
+- [public/pwa/sw-notifications.js](../public/pwa/sw-notifications.js): background notification handlers (message, periodicsync, notificationclick).
 
 ### localStorage key για notification settings
 
@@ -305,7 +306,7 @@ Format που χρησιμοποιείται παντού:
 
 Η σελίδα ρυθμίσεων περιλαμβάνει και χειροκίνητο `Καθαρισμός cache` action:
 
-- Σβήνει μόνο τα runtime Cache API buckets του Hearth (`hearth-pages-v1`, `hearth-assets-v1`).
+- Σβήνει μόνο τα runtime Cache API buckets του Hearth (`hearth-pages-v1`, `hearth-assets-v1`, `hearth-external-assets-v1`).
 - Κρατά το `hearth-notif-state-v1` ώστε να μη χαθεί το dedupe state των υπενθυμίσεων.
 - Κάνει `unregister()` μόνο στο service worker registration που ελέγχει τη σελίδα ρυθμίσεων.
 - Μεταφέρει τον χρήστη στο dashboard, όπου το `pwa.js` κάνει ξανά register τον service worker.
