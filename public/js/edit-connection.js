@@ -53,21 +53,28 @@ Q('.form-select').on('change', saveChanges);
 // ── Scheduled-next quick buttons ─────────────────────────────────────────────
 
 const schedNextEl = Q('#scheduled-next').element;
+const scheduledNextQuickChangeEvent = 'scheduled-next-quick-change';
+
+Q('#scheduled-next').on(scheduledNextQuickChangeEvent, saveChanges);
+
+function emitScheduledNextQuickChange() {
+    schedNextEl.dispatchEvent(new CustomEvent(scheduledNextQuickChangeEvent));
+}
 
 Q('#sched-today').on('click', function() {
     schedNextEl.value = Connection._today();
-    saveChanges();
+    emitScheduledNextQuickChange();
 });
 
 Q('#sched-tomorrow').on('click', function() {
     schedNextEl.value = Connection._addDays(Connection._today(), 1);
-    saveChanges();
+    emitScheduledNextQuickChange();
 });
 
 Q('#sched-plus1').on('click', function() {
     const base = schedNextEl.value || Connection._today();
     schedNextEl.value = Connection._addDays(base, 1);
-    saveChanges();
+    emitScheduledNextQuickChange();
 });
 
 
