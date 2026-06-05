@@ -187,7 +187,7 @@ Dashboard actions:
 Το [public/js/edit-connection.js](../public/js/edit-connection.js) κάνει τα εξής:
 
 1. διαβάζει το `id` από το URL μέσω `Q.url.get('id')`
-2. αν λείπει ή δεν βρεθεί επαφή, επιστρέφει στο dashboard
+2. αν λείπει ή δεν βρεθεί επαφή, δείχνει fallback μήνυμα και link επιστροφής στο dashboard
 3. γεμίζει το form με τα υπάρχοντα δεδομένα
 4. στο submit καλεί `network.updateConnection(...)`
 5. στο delete καλεί `network.removeConnection(...)`
@@ -237,7 +237,7 @@ Format που χρησιμοποιείται παντού:
 
 - manifest: metadata και icons
 - pwa.js: registration του service worker
-- service-worker.js: network-first caching για όλα τα requests του app, με fallback σε cache, και notification handlers
+- service-worker.js: network-first caching με ξεχωριστό handling για navigations. Τα HTML pages γίνονται cache by pathname χωρίς query string ώστε routes όπως `edit-connection.html?id=abc` και `edit-connection.html?id=xyz` να μοιράζονται το ίδιο offline shell. Τα pages και assets γράφονται σε app-specific caches (`hearth-pages-v1`, `hearth-assets-v1`) ώστε reset actions να επηρεάζουν μόνο το Hearth. Περιλαμβάνει επίσης notification handlers.
 
 ## 12. Local Push Notifications
 
@@ -305,8 +305,10 @@ Format που χρησιμοποιείται παντού:
 
 Η σελίδα ρυθμίσεων περιλαμβάνει και χειροκίνητο `Καθαρισμός cache` action:
 
-- Σβήνει όλα τα Cache API buckets του app εκτός από το `hearth-notif-state-v1`.
-- Καλεί `registration.update()` στα διαθέσιμα service worker registrations.
+- Σβήνει μόνο τα runtime Cache API buckets του Hearth (`hearth-pages-v1`, `hearth-assets-v1`).
+- Κρατά το `hearth-notif-state-v1` ώστε να μη χαθεί το dedupe state των υπενθυμίσεων.
+- Κάνει `unregister()` μόνο στο service worker registration που ελέγχει τη σελίδα ρυθμίσεων.
+- Μεταφέρει τον χρήστη στο dashboard, όπου το `pwa.js` κάνει ξανά register τον service worker.
 - Κάνει refresh τη σελίδα ώστε το app shell να ξαναζητηθεί από το δίκτυο.
 - Δεν επηρεάζει `localStorage`, άρα δεν διαγράφει connections ή notification settings.
 

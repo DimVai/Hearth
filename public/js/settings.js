@@ -1,6 +1,7 @@
 'use strict';
 
 const notificationStateCacheName = 'hearth-notif-state-v1';
+const runtimeCacheNames = ['hearth-pages-v1', 'hearth-assets-v1'];
 
 // ── Init ─────────────────────────────────────────────────────────────────────
 
@@ -60,14 +61,23 @@ async function clearRuntimeCaches() {
     }
 
     const cacheNames = await caches.keys();
-    const cacheNamesToDelete = cacheNames.filter(name => name !== notificationStateCacheName);
+    const cacheNamesToDelete = cacheNames.filter(name => runtimeCacheNames.includes(name));
 
     await Promise.all(cacheNamesToDelete.map(name => caches.delete(name)));
+}
 
-    if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(registrations.map(registration => registration.update().catch(() => undefined)));
+async function resetServiceWorkerRegistration() {
+    if (!('serviceWorker' in navigator)) {
+        return false;
     }
+
+    const registration = await navigator.serviceWorker.getRegistration();
+    if (!registration) {
+        return false;
+    }
+
+    await registration.unregister();
+    return true;
 }
 
 // ── Event listeners ───────────────────────────────────────────────────────────
@@ -90,18 +100,19 @@ Q('#btn-enable-notifications').on('click', async () => {
 });
 
 Q('#clear-cache-btn')?.on('click', async function() {
-    if (!confirm('Να καθαριστεί η cache της εφαρμογής; Στο επόμενο refresh τα αρχεία θα κατέβουν ξανά.')) return;
+    if (!confirm('Να γίνει επαναφορά των offline αρχείων της εφαρμογής; Θα διαγραφεί η cache του Hearth, θα γίνει επανεκκίνηση του service worker και θα μεταφερθείς στο dashboard.')) return;
 
     this.disabled = true;
-    setCacheStatus('Καθαρισμός cache...');
+    setCacheStatus('Επαναφορά offline αρχείων...');
 
     try {
         await clearRuntimeCaches();
-        setCacheStatus('Η cache καθαρίστηκε. Γίνεται refresh...');
-        window.location.reload();
+        await resetServiceWorkerRegistration();
+        setCacheStatus('Η επαναφορά ολοκληρώθηκε. Μεταφορά στο dashboard...');
+        window.location.href = '../index.html';
     } catch {
         this.disabled = false;
-        setCacheStatus('Δεν ήταν δυνατό να καθαριστεί η cache σε αυτό το περιβάλλον.', true);
+        setCacheStatus('Δεν ήταν δυνατό να γίνει επαναφορά των offline αρχείων σε αυτό το περιβάλλον.', true);
     }
 });
 
