@@ -1,0 +1,25 @@
+# Gradle files
+.gradle/
+build/
+/*/build/
+.kotlin/
+
+# IntelliJ / Android Studio files
+.idea/
+*.iml
+*.iws
+*.hprof
+
+# Generated Android files
+captures/
+.externalNativeBuild
+.cxx
+local.properties
+*.apk
+*.ap_
+*.aab
+*.dex
+
+# Dim werid files
+Delete build folder.md
+Hearth-PWA

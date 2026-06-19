@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--
+        The splash screen icon should be within the inner 160dp of a 240dp window.
+        However, the system scales the icon. To avoid clipping on some devices,
+        we wrap it in a layer-list with padding.
+    -->
+    <item
+        android:width="120dp"
+        android:height="120dp"
+        android:drawable="@drawable/logo"
+        android:gravity="center" />
+</layer-list>

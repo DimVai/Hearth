@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors from style.css -->
+    <color name="primary">#0049E5</color> <!-- hsl(221, 100%, 45%) -->
+    <color name="header_bg">#00215C</color> <!-- hsl(221, 100%, 18%) -->
+    <color name="background">#0E131C</color> <!-- hsl(221, 30%, 8%) -->
+    <color name="accent">#D18200</color> <!-- hsl(32, 100%, 41%) -->
+</resources>
