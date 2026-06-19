@@ -1,5 +1,6 @@
 package gr.dimvai.hearth.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -238,18 +239,29 @@ fun HearthDatePicker(
     var showDialog by remember { mutableStateOf(false) }
     val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-    OutlinedTextField(
-        value = selectedDate?.format(formatter) ?: "",
-        onValueChange = {},
-        label = { Text(label) },
-        modifier = Modifier.fillMaxWidth(),
-        readOnly = true,
-        trailingIcon = {
-            IconButton(onClick = { showDialog = true }) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { showDialog = true }
+    ) {
+        OutlinedTextField(
+            value = selectedDate?.format(formatter) ?: "",
+            onValueChange = {},
+            label = { Text(label) },
+            modifier = Modifier.fillMaxWidth(),
+            readOnly = true,
+            enabled = false, // Disable to pass clicks to the parent Box
+            colors = OutlinedTextFieldDefaults.colors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+            ),
+            trailingIcon = {
                 Icon(Icons.Default.DateRange, contentDescription = "Select Date")
             }
-        }
-    )
+        )
+    }
 
     if (showDialog) {
         val datePickerState = rememberDatePickerState(

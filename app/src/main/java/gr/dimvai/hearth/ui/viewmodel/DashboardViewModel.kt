@@ -55,10 +55,18 @@ class DashboardViewModel(private val repository: ConnectionRepository) : ViewMod
         }
     }
 
-    fun postponeToTomorrow(connection: Connection) {
+    fun postponeByOneDay(connection: Connection) {
         viewModelScope.launch {
+            val today = LocalDate.now()
+            val currentNextDate = connection.calculateNextCommunicationDate()
+            val newDate = if (currentNextDate.plusDays(1).isBefore(today)) {
+                today
+            } else {
+                currentNextDate.plusDays(1)
+            }
+            
             repository.update(connection.copy(
-                scheduledNextDate = LocalDate.now().plusDays(1)
+                scheduledNextDate = newDate
             ))
         }
     }

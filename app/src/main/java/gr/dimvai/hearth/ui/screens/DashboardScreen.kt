@@ -1,5 +1,6 @@
 package gr.dimvai.hearth.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -136,44 +137,67 @@ fun ConnectionCard(
     viewModel: DashboardViewModel,
     onEditClick: (String) -> Unit
 ) {
+    val buttonSize = 56.dp
+
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onEditClick(connection.id) },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = if (connection.isOverdue) CardDefaults.outlinedCardBorder().copy(brush = androidx.compose.ui.graphics.SolidColor(Accent)) else null
     ) {
         Row(
             modifier = Modifier
-                .padding(12.dp)
+                .padding(vertical = 20.dp, horizontal = 16.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = connection.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 6.dp)
+                )
+                
+                val daysUntil = connection.getDaysUntilNext()
+                val nextCommText = when {
+                    daysUntil < 0 -> "Εκπρόθεσμο (${-daysUntil} μέρες)"
+                    daysUntil == 0L -> "Σήμερα"
+                    daysUntil == 1L -> "Αύριο"
+                    else -> "Σε $daysUntil μέρες"
+                }
+                
+                Text(
+                    text = nextCommText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (connection.isOverdue) Accent else MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = if (connection.isToday) "Σήμερα" else "Σε ${connection.frequencyDays} μέρες",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = if (connection.isOverdue) Accent else MaterialTheme.colorScheme.onSurfaceVariant
+                    text = connection.getFrequencyLabel(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
             
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 FilledIconButton(
                     onClick = { viewModel.markCommunicated(connection) },
+                    modifier = Modifier.size(buttonSize),
                     colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color(0xFF2E7D32))
                 ) {
-                    Icon(Icons.Default.Check, contentDescription = "Mark as done")
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "Mark as done",
+                        modifier = Modifier.size(28.dp)
+                    )
                 }
                 
-                OutlinedIconButton(onClick = { viewModel.postponeToTomorrow(connection) }) {
-                    Text("+1", fontWeight = FontWeight.Bold)
-                }
-
-                OutlinedIconButton(onClick = { onEditClick(connection.id) }) {
-                    Icon(Icons.Default.Edit, contentDescription = "Edit")
+                OutlinedIconButton(
+                    onClick = { viewModel.postponeByOneDay(connection) },
+                    modifier = Modifier.size(buttonSize)
+                ) {
+                    Text("+1", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 }
             }
         }

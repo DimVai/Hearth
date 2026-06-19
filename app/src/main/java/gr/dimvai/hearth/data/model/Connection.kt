@@ -33,4 +33,22 @@ data class Connection(
 
     val isToday: Boolean
         get() = calculateNextCommunicationDate().isEqual(LocalDate.now())
+
+    fun getDaysUntilNext(): Long {
+        val next = calculateNextCommunicationDate()
+        val today = LocalDate.now()
+        return java.time.temporal.ChronoUnit.DAYS.between(today, next)
+    }
+
+    fun getFrequencyLabel(): String {
+        return when (frequencyDays) {
+            1 -> "Κάθε μέρα"
+            2 -> "Κάθε 2 μέρες"
+            7 -> "Κάθε εβδομάδα"
+            14 -> "Κάθε 2 εβδομάδες"
+            30 -> "Κάθε μήνα"
+            60 -> "Κάθε 2 μήνες"
+            else -> "Κάθε $frequencyDays μέρες"
+        }
+    }
 }
