@@ -49,15 +49,25 @@ fun AddScreen(
                 frequencyDays = viewModel.frequencyDays,
                 onFrequencyChange = { viewModel.frequencyDays = it },
                 lastCommunicationDate = viewModel.lastCommunicationDate,
-                onDateChange = { viewModel.lastCommunicationDate = it }
+                onDateChange = { viewModel.lastCommunicationDate = it },
+                scheduledNextDate = viewModel.scheduledNextDate,
+                onScheduledDateChange = { viewModel.scheduledNextDate = it }
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Button(
                 onClick = { viewModel.saveConnection(onBackClick) },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp),
                 enabled = viewModel.name.isNotBlank()
             ) {
-                Text("Αποθήκευση")
+                Text(
+                    text = "Αποθήκευση",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }

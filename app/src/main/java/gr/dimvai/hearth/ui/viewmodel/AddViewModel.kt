@@ -14,6 +14,7 @@ class AddViewModel(private val repository: ConnectionRepository) : ViewModel() {
     var name by mutableStateOf("")
     var frequencyDays by mutableStateOf(7)
     var lastCommunicationDate by mutableStateOf<LocalDate?>(null)
+    var scheduledNextDate by mutableStateOf<LocalDate?>(null)
 
     fun saveConnection(onSuccess: () -> Unit) {
         if (name.isBlank()) return
@@ -22,7 +23,8 @@ class AddViewModel(private val repository: ConnectionRepository) : ViewModel() {
             val connection = Connection(
                 name = name,
                 frequencyDays = frequencyDays,
-                lastCommunicationDate = lastCommunicationDate
+                lastCommunicationDate = lastCommunicationDate,
+                scheduledNextDate = scheduledNextDate
             )
             repository.insert(connection)
             onSuccess()
