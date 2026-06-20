@@ -1,5 +1,6 @@
 package gr.dimvai.hearth.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import gr.dimvai.hearth.data.model.Connection
@@ -44,7 +46,7 @@ fun DashboardScreen(
             FloatingActionButton(
                 onClick = onAddClick,
                 containerColor = Accent,
-                contentColor = Color.White
+                contentColor = MaterialTheme.colorScheme.onSecondary
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Contact")
             }
@@ -143,8 +145,15 @@ fun ConnectionCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onEditClick(connection.id) },
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = if (connection.isOverdue) CardDefaults.outlinedCardBorder().copy(brush = androidx.compose.ui.graphics.SolidColor(Accent)) else null
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.4f)
+                .compositeOver(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.1f))
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (connection.isOverdue) Accent else MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+        ),
+        shape = MaterialTheme.shapes.large
     ) {
         Row(
             modifier = Modifier

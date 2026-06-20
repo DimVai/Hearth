@@ -11,11 +11,11 @@ import androidx.compose.ui.graphics.Color
  */
 private val HearthColorScheme = darkColorScheme(
     primary = Primary,
-    onPrimary = Color.White,
+    onPrimary = SoftWhite,
     primaryContainer = PrimaryDark,
-    onPrimaryContainer = Color.White,
+    onPrimaryContainer = SoftWhite,
     secondary = Accent,
-    onSecondary = Color.White,
+    onSecondary = SoftWhite,
     background = Background,
     onBackground = OnBackground,
     surface = Surface,

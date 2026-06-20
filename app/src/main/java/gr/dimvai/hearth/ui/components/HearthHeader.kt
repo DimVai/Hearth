@@ -26,81 +26,85 @@ fun HearthHeader(
     showSettingsButton: Boolean = false,
     onSettingsClick: () -> Unit = {}
 ) {
-    TopAppBar(
-        modifier = Modifier.height(110.dp),
-        title = {
-            Row(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .statusBarsPadding()
-                    .padding(start = 8.dp, bottom = 12.dp),
-                verticalAlignment = Alignment.Bottom
-            ) {
-                if (title == "Hearth") {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(44.dp)
-                            .padding(bottom = 2.dp)
+    Column {
+        TopAppBar(
+            modifier = Modifier.height(110.dp),
+            title = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .statusBarsPadding()
+                        .padding(start = 8.dp, bottom = 12.dp),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    if (title == "Hearth") {
+                        Image(
+                            painter = painterResource(id = R.drawable.logo),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(44.dp)
+                                .padding(bottom = 2.dp)
+                        )
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                    
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 32.sp
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
                 }
-                
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    fontSize = 34.sp
-                )
-            }
-        },
-        navigationIcon = {
-            if (showBackButton) {
-                Box(
-                    modifier = Modifier.fillMaxHeight().statusBarsPadding(),
-                    contentAlignment = Alignment.BottomStart
-                ) {
-                    IconButton(
-                        onClick = onBackClick,
-                        modifier = Modifier.size(56.dp).padding(bottom = 4.dp)
+            },
+            navigationIcon = {
+                if (showBackButton) {
+                    Box(
+                        modifier = Modifier.fillMaxHeight().statusBarsPadding(),
+                        contentAlignment = Alignment.BottomStart
                     ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White,
-                            modifier = Modifier.size(32.dp)
-                        )
+                        IconButton(
+                            onClick = onBackClick,
+                            modifier = Modifier.size(56.dp).padding(bottom = 4.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Back",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
                     }
                 }
-            }
-        },
-        actions = {
-            if (showSettingsButton) {
-                Box(
-                    modifier = Modifier.fillMaxHeight().statusBarsPadding(),
-                    contentAlignment = Alignment.BottomEnd
-                ) {
-                    IconButton(
-                        onClick = onSettingsClick,
-                        modifier = Modifier
-                            .padding(bottom = 8.dp, end = 12.dp)
-                            .size(56.dp)
+            },
+            actions = {
+                if (showSettingsButton) {
+                    Box(
+                        modifier = Modifier.fillMaxHeight().statusBarsPadding(),
+                        contentAlignment = Alignment.BottomEnd
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Settings",
-                            tint = Color.White,
-                            modifier = Modifier.size(38.dp)
-                        )
+                        IconButton(
+                            onClick = onSettingsClick,
+                            modifier = Modifier
+                                .padding(bottom = 8.dp, end = 12.dp)
+                                .size(56.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Settings,
+                                contentDescription = "Settings",
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                modifier = Modifier.size(38.dp)
+                            )
+                        }
                     }
                 }
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = HeaderBackground
-        ),
-        windowInsets = WindowInsets(0)
-    )
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = HeaderBackground
+            ),
+            windowInsets = WindowInsets(0)
+        )
+        // Προσθήκη κενού χώρου κάτω από το header
+        Spacer(modifier = Modifier.height(16.dp))
+    }
 }

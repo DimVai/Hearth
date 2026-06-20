@@ -13,6 +13,8 @@ val Primary = Color.hsl(221f, 1f, 0.45f)
 val PrimaryDark = Color.hsl(221f, 1f, 0.30f)
 // --color-primary-light: hsl(221, 100%, 60%)
 val PrimaryLight = Color.hsl(221f, 1f, 0.60f)
+// A very light blue for highlights
+val PrimaryExLight = Color.hsl(221f, 1f, 0.85f)
 
 // --color-accent: hsl(32, 100%, 41%)
 val Accent = Color.hsl(32f, 1f, 0.41f)
@@ -27,9 +29,13 @@ val Surface = Color.hsl(221f, 0.25f, 0.13f)
 val HeaderBackground = Color.hsl(221f, 1f, 0.18f)
 
 // --bs-body-color: hsl(0, 0%, 88%)
-val OnBackground = Color.hsl(0f, 0f, 0.88f)
+val OnBackground = Color.hsl(221f, 0.15f, 0.90f) // Ήπιο άσπρο με λίγο μπλε
 // --bs-heading-color: hsl(0, 0%, 97%)
-val OnSurface = Color.hsl(0f, 0f, 0.97f)
+val OnSurface = Color.hsl(221f, 0.10f, 0.96f) // Πολύ ανοιχτό γαλάζιο/άσπρο
+
+// Ήπιο άσπρο για γενική χρήση
+val SoftWhite = Color.hsl(221f, 0.08f, 0.94f)
+
 // --color-body-muted: hsl(221, 20%, 55%)
 val OnSurfaceVariant = Color.hsl(221f, 0.20f, 0.55f)
 
@@ -38,4 +44,4 @@ val Outline = Color.hsl(221f, 0.25f, 0.22f)
 
 // Danger color from btn-danger
 val Danger = Color.hsl(348f, 0.90f, 0.38f)
-val OnDanger = Color.White
+val OnDanger = SoftWhite

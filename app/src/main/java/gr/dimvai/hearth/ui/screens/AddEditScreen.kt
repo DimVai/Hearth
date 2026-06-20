@@ -1,5 +1,6 @@
 package gr.dimvai.hearth.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -16,6 +17,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import gr.dimvai.hearth.ui.components.HearthHeader
+import gr.dimvai.hearth.ui.theme.PrimaryExLight
+import gr.dimvai.hearth.ui.theme.PrimaryLight
 import gr.dimvai.hearth.ui.viewmodel.AddViewModel
 import gr.dimvai.hearth.ui.viewmodel.EditViewModel
 import java.time.LocalDate
@@ -88,7 +91,7 @@ fun EditScreen(
         Scaffold(
             topBar = {
                 HearthHeader(
-                    title = "Επεξεργασία Επαφής",
+                    title = "Επαφή",
                     showBackButton = true,
                     onBackClick = onBackClick
                 )
@@ -189,26 +192,61 @@ fun ConnectionForm(
         FrequencySelector(selectedDays = frequencyDays, onFrequencyChange = onFrequencyChange)
 
         HearthDatePicker(
-            label = "Τελευταία επικοινωνία (προαιρετικό)",
+            label = "Τελευταία επικοινωνία",
             selectedDate = lastCommunicationDate,
             onDateChange = onDateChange
         )
 
         if (onScheduledDateChange != null) {
-            HearthDatePicker(
-                label = "Επόμενη προγραμματισμένη επικοινωνία (προαιρετικό)",
-                selectedDate = scheduledNextDate,
-                onDateChange = onScheduledDateChange
-            )
-            
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Surface(
+                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.15f),
+                shape = MaterialTheme.shapes.large,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
+                modifier = Modifier.fillMaxWidth()
             ) {
-                val today = LocalDate.now()
-                QuickDateButton("Σήμερα", today, onScheduledDateChange)
-                QuickDateButton("Αύριο", today.plusDays(1), onScheduledDateChange)
-                QuickDateButton("+1 μέρα", scheduledNextDate?.plusDays(1) ?: today.plusDays(1), onScheduledDateChange)
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.DateRange,
+                            contentDescription = null,
+                            tint = PrimaryExLight
+                        )
+                        Text(
+                            "Προγραμματισμός επόμενης",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold,
+                            color = PrimaryExLight
+                        )
+                    }
+
+                    HearthDatePicker(
+                        label = "Ημερομηνία",
+                        selectedDate = scheduledNextDate,
+                        onDateChange = onScheduledDateChange
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        val today = LocalDate.now()
+                        QuickDateButton("Σήμερα", today, onScheduledDateChange)
+                        QuickDateButton("Αύριο", today.plusDays(1), onScheduledDateChange)
+                        QuickDateButton(
+                            label = "+1 μέρα",
+                            date = (scheduledNextDate ?: today).plusDays(1),
+                            onClick = onScheduledDateChange
+                        )
+                    }
+                }
             }
         }
     }
@@ -216,8 +254,16 @@ fun ConnectionForm(
 
 @Composable
 fun QuickDateButton(label: String, date: LocalDate, onClick: (LocalDate) -> Unit) {
-    OutlinedButton(onClick = { onClick(date) }, contentPadding = PaddingValues(horizontal = 8.dp)) {
-        Text(label, style = MaterialTheme.typography.bodySmall)
+    OutlinedButton(
+        onClick = { onClick(date) },
+        contentPadding = PaddingValues(horizontal = 12.dp),
+        modifier = Modifier.height(36.dp),
+        border = BorderStroke(1.dp, PrimaryExLight.copy(alpha = 0.5f)),
+        colors = ButtonDefaults.outlinedButtonColors(
+            contentColor = PrimaryExLight
+        )
+    ) {
+        Text(label, style = MaterialTheme.typography.labelMedium)
     }
 }
 

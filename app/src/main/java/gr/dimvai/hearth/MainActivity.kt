@@ -55,9 +55,21 @@ class MainActivity : ComponentActivity() {
                             )
                             DashboardScreen(
                                 viewModel = viewModel,
-                                onAddClick = { navController.navigate(Screen.AddConnection) },
-                                onEditClick = { id -> navController.navigate(Screen.EditConnection(id)) },
-                                onSettingsClick = { navController.navigate(Screen.Settings) }
+                                onAddClick = { 
+                                    navController.navigate(Screen.AddConnection) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onEditClick = { id -> 
+                                    navController.navigate(Screen.EditConnection(id)) {
+                                        launchSingleTop = true
+                                    }
+                                },
+                                onSettingsClick = { 
+                                    navController.navigate(Screen.Settings) {
+                                        launchSingleTop = true
+                                    }
+                                }
                             )
                         }
 
@@ -67,7 +79,11 @@ class MainActivity : ComponentActivity() {
                             )
                             AddScreen(
                                 viewModel = viewModel,
-                                onBackClick = { navController.popBackStack() }
+                                onBackClick = { 
+                                    if (navController.previousBackStackEntry != null) {
+                                        navController.popBackStack()
+                                    }
+                                }
                             )
                         }
 
@@ -78,7 +94,11 @@ class MainActivity : ComponentActivity() {
                             )
                             EditScreen(
                                 viewModel = viewModel,
-                                onBackClick = { navController.popBackStack() }
+                                onBackClick = { 
+                                    if (navController.previousBackStackEntry != null) {
+                                        navController.popBackStack()
+                                    }
+                                }
                             )
                         }
 
@@ -88,7 +108,11 @@ class MainActivity : ComponentActivity() {
                             )
                             SettingsScreen(
                                 viewModel = viewModel,
-                                onBackClick = { navController.popBackStack() }
+                                onBackClick = { 
+                                    if (navController.previousBackStackEntry != null) {
+                                        navController.popBackStack()
+                                    }
+                                }
                             )
                         }
                     }
