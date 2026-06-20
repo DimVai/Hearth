@@ -56,7 +56,7 @@ class EditViewModel(
     private suspend fun save() {
         val current = originalConnection ?: return
         val updated = current.copy(
-            name = name,
+            name = name.trim(),
             frequencyDays = frequencyDays,
             lastCommunicationDate = lastCommunicationDate,
             scheduledNextDate = scheduledNextDate

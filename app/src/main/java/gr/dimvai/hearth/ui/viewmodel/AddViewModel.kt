@@ -21,7 +21,7 @@ class AddViewModel(private val repository: ConnectionRepository) : ViewModel() {
 
         viewModelScope.launch {
             val connection = Connection(
-                name = name,
+                name = name.trim(),
                 frequencyDays = frequencyDays,
                 lastCommunicationDate = lastCommunicationDate,
                 scheduledNextDate = scheduledNextDate

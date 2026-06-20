@@ -78,6 +78,8 @@ fun EditScreen(
     viewModel: EditViewModel,
     onBackClick: () -> Unit
 ) {
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+
     if (viewModel.isLoading) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
@@ -126,7 +128,7 @@ fun EditScreen(
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
-                    onClick = { viewModel.deleteConnection(onBackClick) },
+                    onClick = { showDeleteConfirmation = true },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
                 ) {
@@ -136,6 +138,30 @@ fun EditScreen(
                 }
             }
         }
+    }
+
+    if (showDeleteConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmation = false },
+            title = { Text("Διαγραφή επαφής") },
+            text = { Text("Θέλετε σίγουρα να διαγράψετε την επαφή ${viewModel.name};") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteConfirmation = false
+                        viewModel.deleteConnection(onBackClick)
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text("Διαγραφή")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirmation = false }) {
+                    Text("Ακύρωση")
+                }
+            }
+        )
     }
 }
 
