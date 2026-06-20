@@ -115,7 +115,7 @@ fun SectionHeader(title: String, color: Color) {
     Column(modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)) {
         Text(
             text = title,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
             color = color
         )

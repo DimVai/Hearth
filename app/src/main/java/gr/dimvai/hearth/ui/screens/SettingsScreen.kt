@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import java.util.Locale
 import gr.dimvai.hearth.ui.components.HearthHeader
 import gr.dimvai.hearth.ui.viewmodel.SettingsViewModel
 
@@ -54,7 +55,7 @@ fun SettingsScreen(
         ) {
             Text(
                 text = "ΕΙΔΟΠΟΙΗΣΕΙΣ",
-                style = MaterialTheme.typography.labelMedium,
+                style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -99,10 +100,10 @@ fun SettingsScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
-                            Text(text = "Ώρα ειδοποίησης", style = MaterialTheme.typography.titleMedium)
+                            Text(text = "Ώρα υπενθύμισης", style = MaterialTheme.typography.titleMedium)
                         }
                         Text(
-                            text = String.format("%02d:%02d", state.reminderHour, state.reminderMinute),
+                            text = String.format(Locale.getDefault(), "%02d:%02d", state.reminderHour, state.reminderMinute),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = FontWeight.Bold
