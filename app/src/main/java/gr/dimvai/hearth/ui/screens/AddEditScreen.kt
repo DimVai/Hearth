@@ -347,16 +347,14 @@ fun HearthDatePicker(
 
     if (showDialog) {
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = selectedDate?.atStartOfDay(java.time.ZoneId.systemDefault())?.toInstant()?.toEpochMilli()
+            initialSelectedDateMillis = selectedDate?.toUtcDatePickerMillis()
         )
         DatePickerDialog(
             onDismissRequest = { showDialog = false },
             confirmButton = {
                 TextButton(onClick = {
                     datePickerState.selectedDateMillis?.let {
-                        val date = java.time.Instant.ofEpochMilli(it)
-                            .atZone(java.time.ZoneId.of("UTC"))
-                            .toLocalDate()
+                        val date = it.toLocalDateFromUtcDatePickerMillis()
                         onDateChange(date)
                     }
                     showDialog = false
@@ -376,4 +374,14 @@ fun HearthDatePicker(
             DatePicker(state = datePickerState)
         }
     }
+}
+
+private fun LocalDate.toUtcDatePickerMillis(): Long {
+    return atStartOfDay(java.time.ZoneOffset.UTC).toInstant().toEpochMilli()
+}
+
+private fun Long.toLocalDateFromUtcDatePickerMillis(): LocalDate {
+    return java.time.Instant.ofEpochMilli(this)
+        .atZone(java.time.ZoneOffset.UTC)
+        .toLocalDate()
 }
