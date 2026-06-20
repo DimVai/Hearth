@@ -6,7 +6,7 @@ import gr.dimvai.hearth.data.repository.ConnectionRepository
 
 class HearthApplication : Application() {
     val database by lazy { HearthDatabase.getDatabase(this) }
-    val repository by lazy { ConnectionRepository(database.connectionDao()) }
+    val repository by lazy { ConnectionRepository(this, database.connectionDao()) }
 
     override fun onCreate() {
         super.onCreate()

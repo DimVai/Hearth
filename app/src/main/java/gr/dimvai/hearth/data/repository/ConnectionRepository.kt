@@ -1,10 +1,14 @@
 package gr.dimvai.hearth.data.repository
 
+import android.app.Application
 import gr.dimvai.hearth.data.local.ConnectionDao
 import gr.dimvai.hearth.data.model.Connection
 import kotlinx.coroutines.flow.Flow
 
-class ConnectionRepository(private val connectionDao: ConnectionDao) {
+class ConnectionRepository(
+    val application: Application,
+    private val connectionDao: ConnectionDao
+) {
     val allConnections: Flow<List<Connection>> = connectionDao.getAllConnections()
 
     suspend fun getConnectionById(id: String): Connection? {

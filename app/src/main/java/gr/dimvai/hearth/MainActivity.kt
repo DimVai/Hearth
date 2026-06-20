@@ -18,10 +18,12 @@ import gr.dimvai.hearth.ui.navigation.Screen
 import gr.dimvai.hearth.ui.screens.AddScreen
 import gr.dimvai.hearth.ui.screens.DashboardScreen
 import gr.dimvai.hearth.ui.screens.EditScreen
+import gr.dimvai.hearth.ui.screens.SettingsScreen
 import gr.dimvai.hearth.ui.theme.HearthTheme
 import gr.dimvai.hearth.ui.viewmodel.AddViewModel
 import gr.dimvai.hearth.ui.viewmodel.DashboardViewModel
 import gr.dimvai.hearth.ui.viewmodel.EditViewModel
+import gr.dimvai.hearth.ui.viewmodel.SettingsViewModel
 import gr.dimvai.hearth.ui.viewmodel.ViewModelFactory
 
 class MainActivity : ComponentActivity() {
@@ -51,7 +53,7 @@ class MainActivity : ComponentActivity() {
                                 viewModel = viewModel,
                                 onAddClick = { navController.navigate(Screen.AddConnection) },
                                 onEditClick = { id -> navController.navigate(Screen.EditConnection(id)) },
-                                onSettingsClick = { /* TODO */ }
+                                onSettingsClick = { navController.navigate(Screen.Settings) }
                             )
                         }
 
@@ -71,6 +73,16 @@ class MainActivity : ComponentActivity() {
                                 factory = ViewModelFactory(repository, route.connectionId)
                             )
                             EditScreen(
+                                viewModel = viewModel,
+                                onBackClick = { navController.popBackStack() }
+                            )
+                        }
+
+                        composable<Screen.Settings> {
+                            val viewModel: SettingsViewModel = viewModel(
+                                factory = ViewModelFactory(repository)
+                            )
+                            SettingsScreen(
                                 viewModel = viewModel,
                                 onBackClick = { navController.popBackStack() }
                             )
