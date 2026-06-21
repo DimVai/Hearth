@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -33,7 +32,7 @@ fun DashboardScreen(
     viewModel: DashboardViewModel,
     onAddClick: () -> Unit,
     onEditClick: (String) -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsState()
 
@@ -69,7 +68,12 @@ fun DashboardScreen(
                     items = state.overdue,
                     key = { connection -> connection.id }
                 ) { connection ->
-                    ConnectionCard(connection, viewModel, false, onEditClick)
+                    ConnectionCard(
+                        connection = connection,
+                        viewModel = viewModel,
+                        isUpcomingOrLater = false,
+                        onEditClick = onEditClick
+                    )
                 }
             }
 
@@ -81,7 +85,12 @@ fun DashboardScreen(
                     items = state.today,
                     key = { it.id }
                 ) { connection ->
-                    ConnectionCard(connection, viewModel, false, onEditClick)
+                    ConnectionCard(
+                        connection = connection,
+                        viewModel = viewModel,
+                        isUpcomingOrLater = false,
+                        onEditClick = onEditClick
+                    )
                 }
             }
 
@@ -93,7 +102,12 @@ fun DashboardScreen(
                     items = state.upcoming,
                     key = { it.id }
                 ) { connection ->
-                    ConnectionCard(connection, viewModel, true, onEditClick)
+                    ConnectionCard(
+                        connection = connection,
+                        viewModel = viewModel,
+                        isUpcomingOrLater = true,
+                        onEditClick = onEditClick
+                    )
                 }
             }
 
@@ -105,7 +119,12 @@ fun DashboardScreen(
                     items = state.later,
                     key = { it.id }
                 ) { connection ->
-                    ConnectionCard(connection, viewModel, true, onEditClick)
+                    ConnectionCard(
+                        connection = connection,
+                        viewModel = viewModel,
+                        isUpcomingOrLater = true,
+                        onEditClick = onEditClick
+                    )
                 }
             }
             
