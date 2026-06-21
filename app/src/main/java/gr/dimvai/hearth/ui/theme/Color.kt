@@ -16,8 +16,8 @@ val PrimaryLight = Color.hsl(221f, 1f, 0.60f)
 // A very light blue for highlights
 val PrimaryExLight = Color.hsl(221f, 1f, 0.85f)
 
-// --color-accent: hsl(32, 100%, 41%)
-val Accent = Color.hsl(32f, 1f, 0.41f)
+// --color-accent: hsl(32, 100%, 36%)
+val Accent = Color.hsl(32f, 1f, 0.36f)
 // --color-accent-hover: hsl(36, 100%, 43%)
 val AccentVariant = Color.hsl(36f, 1f, 0.43f)
 

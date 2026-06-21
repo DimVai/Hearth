@@ -70,4 +70,12 @@ class DashboardViewModel(private val repository: ConnectionRepository) : ViewMod
             ))
         }
     }
+
+    fun moveToToday(connection: Connection) {
+        viewModelScope.launch {
+            repository.update(connection.copy(
+                scheduledNextDate = LocalDate.now()
+            ))
+        }
+    }
 }

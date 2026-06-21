@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.KeyboardDoubleArrowUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -45,8 +46,8 @@ fun DashboardScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddClick,
-                containerColor = Accent,
-                contentColor = MaterialTheme.colorScheme.onSecondary
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Contact")
             }
@@ -65,7 +66,7 @@ fun DashboardScreen(
                     items = state.overdue,
                     key = { connection -> connection.id }
                 ) { connection ->
-                    ConnectionCard(connection, viewModel, onEditClick)
+                    ConnectionCard(connection, viewModel, false, onEditClick)
                 }
             }
 
@@ -77,7 +78,7 @@ fun DashboardScreen(
                     items = state.today,
                     key = { it.id }
                 ) { connection ->
-                    ConnectionCard(connection, viewModel, onEditClick)
+                    ConnectionCard(connection, viewModel, false, onEditClick)
                 }
             }
 
@@ -89,7 +90,7 @@ fun DashboardScreen(
                     items = state.upcoming,
                     key = { it.id }
                 ) { connection ->
-                    ConnectionCard(connection, viewModel, onEditClick)
+                    ConnectionCard(connection, viewModel, true, onEditClick)
                 }
             }
 
@@ -101,7 +102,7 @@ fun DashboardScreen(
                     items = state.later,
                     key = { it.id }
                 ) { connection ->
-                    ConnectionCard(connection, viewModel, onEditClick)
+                    ConnectionCard(connection, viewModel, true, onEditClick)
                 }
             }
             
@@ -137,6 +138,7 @@ fun EmptyState(text: String) {
 fun ConnectionCard(
     connection: Connection,
     viewModel: DashboardViewModel,
+    isUpcomingOrLater: Boolean,
     onEditClick: (String) -> Unit
 ) {
     val buttonSize = 56.dp
@@ -190,21 +192,41 @@ fun ConnectionCard(
             }
             
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                FilledIconButton(
-                    onClick = { viewModel.markCommunicated(connection) },
-                    modifier = Modifier.size(buttonSize),
-                    colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color(0xFF2E7D32))
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "Mark as done",
-                        modifier = Modifier.size(28.dp)
-                    )
+                if (isUpcomingOrLater) {
+                    FilledIconButton(
+                        onClick = { viewModel.moveToToday(connection) },
+                        modifier = Modifier.size(buttonSize),
+                        colors = IconButtonDefaults.filledIconButtonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardDoubleArrowUp,
+                            contentDescription = "Move to today",
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
+                } else {
+                    FilledIconButton(
+                        onClick = { viewModel.markCommunicated(connection) },
+                        modifier = Modifier.size(buttonSize),
+                        colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color(0xFF2E7D32))
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Mark as done",
+                            modifier = Modifier.size(28.dp)
+                        )
+                    }
                 }
                 
-                OutlinedIconButton(
+                FilledIconButton(
                     onClick = { viewModel.postponeByOneDay(connection) },
-                    modifier = Modifier.size(buttonSize)
+                    modifier = Modifier.size(buttonSize),
+                    colors = IconButtonDefaults.filledIconButtonColors(
+                        containerColor = Accent,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
+                    )
                 ) {
                     Text("+1", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                 }
