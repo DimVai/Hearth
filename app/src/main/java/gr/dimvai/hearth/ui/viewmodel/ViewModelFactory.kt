@@ -21,7 +21,7 @@ class ViewModelFactory(
                 EditViewModel(connectionId!!, repository) as T
             }
             modelClass.isAssignableFrom(SettingsViewModel::class.java) -> {
-                SettingsViewModel(repository.application) as T
+                SettingsViewModel(repository, repository.application) as T
             }
             else -> throw IllegalArgumentException("Unknown ViewModel class")
         }
