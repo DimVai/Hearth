@@ -45,3 +45,7 @@ val Outline = Color.hsl(221f, 0.25f, 0.22f)
 // Danger color from btn-danger
 val Danger = Color.hsl(348f, 0.90f, 0.38f)
 val OnDanger = SoftWhite
+
+// Color for adding new items (Violet)
+val AddButtonColor = Color.hsl(270f, 0.70f, 0.40f)
+val OnAddButtonColor = Color.White

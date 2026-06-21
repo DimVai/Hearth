@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import gr.dimvai.hearth.data.model.Connection
 import gr.dimvai.hearth.ui.components.HearthHeader
 import gr.dimvai.hearth.ui.theme.Accent
+import gr.dimvai.hearth.ui.theme.AddButtonColor
+import gr.dimvai.hearth.ui.theme.OnAddButtonColor
 import gr.dimvai.hearth.ui.viewmodel.DashboardViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,8 +48,9 @@ fun DashboardScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = onAddClick,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
+                containerColor = AddButtonColor,
+                contentColor = OnAddButtonColor,
+                modifier = Modifier.padding(bottom = 16.dp, end = 16.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Contact")
             }

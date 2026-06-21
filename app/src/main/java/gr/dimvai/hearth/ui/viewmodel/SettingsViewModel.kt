@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import gr.dimvai.hearth.data.local.SettingsDataStore
-import gr.dimvai.hearth.notifications.ReminderWorker
+import gr.dimvai.hearth.notifications.NotificationScheduler
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -34,9 +34,9 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             settingsDataStore.saveRemindersEnabled(enabled)
             if (enabled) {
                 val current = uiState.value
-                ReminderWorker.schedule(getApplication(), current.reminderHour, current.reminderMinute)
+                NotificationScheduler.schedule(getApplication(), current.reminderHour, current.reminderMinute)
             } else {
-                ReminderWorker.cancel(getApplication())
+                NotificationScheduler.cancel(getApplication())
             }
         }
     }
@@ -45,7 +45,7 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             settingsDataStore.saveReminderTime(hour, minute)
             if (uiState.value.remindersEnabled) {
-                ReminderWorker.schedule(getApplication(), hour, minute)
+                NotificationScheduler.schedule(getApplication(), hour, minute)
             }
         }
     }
