@@ -2,12 +2,14 @@ package gr.dimvai.hearth.notifications
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import gr.dimvai.hearth.HearthApplication
+import gr.dimvai.hearth.MainActivity
 import gr.dimvai.hearth.R
 import gr.dimvai.hearth.data.local.SettingsDataStore
 import gr.dimvai.hearth.data.model.Connection
@@ -65,11 +67,26 @@ class AlarmReceiver : BroadcastReceiver() {
         val names = dueConnections.take(3).joinToString(", ") { it.name }
         val body = if (dueConnections.size > 3) "$names και άλλοι..." else names
 
+        // Δημιουργούμε ένα Intent που θα ανοίγει την MainActivity
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP // Αν η εφαρμογή είναι ήδη ανοιχτή, απλώς τη φέρνει μπροστά
+        }
+        
+        // Το PendingIntent είναι σαν ένα "token" που δίνουμε στο σύστημα Android 
+        // για να εκτελέσει το Intent μας όταν ο χρήστης πατήσει το notification.
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
         val notification = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.logo)
             .setContentTitle(title)
             .setContentText(body)
-            .setAutoCancel(true)
+            .setContentIntent(pendingIntent) // Εδώ συνδέουμε το κλικ με το Intent
+            .setAutoCancel(true) // Αυτό κάνει το notification να εξαφανίζεται μόλις πατηθεί
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
