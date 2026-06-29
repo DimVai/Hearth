@@ -19,12 +19,14 @@ class SettingsDataStore(private val context: Context) {
         val REMINDER_HOUR = intPreferencesKey("reminder_hour")
         val REMINDER_MINUTE = intPreferencesKey("reminder_minute")
         val LAST_NOTIFIED_DATE = stringPreferencesKey("last_notified_date")
+        val NEXT_SCHEDULED_ALARM = stringPreferencesKey("next_scheduled_alarm")
     }
 
     val remindersEnabled: Flow<Boolean> = context.dataStore.data.map { it[REMINDERS_ENABLED] ?: false }
     val reminderHour: Flow<Int> = context.dataStore.data.map { it[REMINDER_HOUR] ?: 10 }
     val reminderMinute: Flow<Int> = context.dataStore.data.map { it[REMINDER_MINUTE] ?: 0 }
     val lastNotifiedDate: Flow<String?> = context.dataStore.data.map { it[LAST_NOTIFIED_DATE] }
+    val nextScheduledAlarm: Flow<String?> = context.dataStore.data.map { it[NEXT_SCHEDULED_ALARM] }
 
     suspend fun saveRemindersEnabled(enabled: Boolean) {
         context.dataStore.edit { it[REMINDERS_ENABLED] = enabled }
@@ -39,5 +41,9 @@ class SettingsDataStore(private val context: Context) {
 
     suspend fun saveLastNotifiedDate(date: String) {
         context.dataStore.edit { it[LAST_NOTIFIED_DATE] = date }
+    }
+
+    suspend fun saveNextScheduledAlarm(dateTime: String?) {
+        context.dataStore.edit { it[NEXT_SCHEDULED_ALARM] = dateTime ?: "" }
     }
 }

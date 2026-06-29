@@ -136,6 +136,15 @@ fun SettingsScreen(
                             fontWeight = FontWeight.Bold
                         )
                     }
+
+                    if (state.nextScheduledAlarm != null) {
+                        Text(
+                            text = "Επόμενη υπενθύμιση: ${state.nextScheduledAlarm}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.padding(start = 16.dp, bottom = 16.dp)
+                        )
+                    }
                 }
             }
 

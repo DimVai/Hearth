@@ -22,30 +22,36 @@ import java.time.LocalDate
 class AlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        val pendingResult = goAsync() // Κρατάμε τον Receiver "ζωντανό" για λίγο παραπάνω
         val application = context.applicationContext as HearthApplication
         val repository = application.repository
         val settings = SettingsDataStore(context)
 
         CoroutineScope(Dispatchers.IO).launch {
-            // Check if reminders are still enabled
-            if (!settings.remindersEnabled.first()) return@launch
+            try {
+                // 1. Έλεγχος αν οι ειδοποιήσεις είναι ενεργές
+                if (!settings.remindersEnabled.first()) return@launch
 
-            // Check if we already notified today
-            val today = LocalDate.now().toString()
-            if (settings.lastNotifiedDate.first() == today) return@launch
+                // 2. Πάντα προγραμματίζουμε το επόμενο ραντεβού (για να μη σπάσει η αλυσίδα)
+                val hour = settings.reminderHour.first()
+                val minute = settings.reminderMinute.first()
+                NotificationScheduler.schedule(context, hour, minute)
 
-            val connections = repository.allConnections.first()
-            val dueConnections = connections.filter { it.isOverdue || it.isToday }
+                // 3. Έλεγχος αν έχουμε ήδη στείλει ειδοποίηση σήμερα
+                val today = LocalDate.now().toString()
+                if (settings.lastNotifiedDate.first() == today) return@launch
 
-            if (dueConnections.isNotEmpty()) {
-                showNotification(context, dueConnections)
-                settings.saveLastNotifiedDate(today)
+                // 4. Έλεγχος αν υπάρχουν επαφές για επικοινωνία
+                val connections = repository.allConnections.first()
+                val dueConnections = connections.filter { it.isOverdue || it.isToday }
+
+                if (dueConnections.isNotEmpty()) {
+                    showNotification(context, dueConnections)
+                    settings.saveLastNotifiedDate(today)
+                }
+            } finally {
+                pendingResult.finish() // Ενημερώνουμε το σύστημα ότι τελειώσαμε
             }
-            
-            // Reschedule for tomorrow
-            val hour = settings.reminderHour.first()
-            val minute = settings.reminderMinute.first()
-            NotificationScheduler.schedule(context, hour, minute)
         }
     }
 

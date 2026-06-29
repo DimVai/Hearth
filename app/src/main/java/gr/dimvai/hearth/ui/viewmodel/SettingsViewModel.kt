@@ -18,6 +18,7 @@ data class SettingsState(
     val remindersEnabled: Boolean = false,
     val reminderHour: Int = 10,
     val reminderMinute: Int = 0,
+    val nextScheduledAlarm: String? = null,
     val backupRestoreMessage: String? = null
 )
 
@@ -33,9 +34,10 @@ class SettingsViewModel(
         settingsDataStore.remindersEnabled,
         settingsDataStore.reminderHour,
         settingsDataStore.reminderMinute,
+        settingsDataStore.nextScheduledAlarm,
         _message
-    ) { enabled, hour, minute, message ->
-        SettingsState(enabled, hour, minute, message)
+    ) { enabled, hour, minute, nextAlarm, message ->
+        SettingsState(enabled, hour, minute, nextAlarm, message)
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
