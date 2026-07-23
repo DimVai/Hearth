@@ -15,11 +15,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import gr.dimvai.hearth.ui.components.HearthHeader
 import gr.dimvai.hearth.ui.theme.PrimaryExLight
-import gr.dimvai.hearth.ui.theme.PrimaryLight
 import gr.dimvai.hearth.ui.viewmodel.AddViewModel
 import gr.dimvai.hearth.ui.viewmodel.EditViewModel
 import java.time.LocalDate
@@ -218,6 +216,17 @@ fun ConnectionForm(
             selectedDate = lastCommunicationDate,
             onDateChange = onDateChange
         )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            QuickDateButton(
+                label = "Σήμερα",
+                date = LocalDate.now(),
+                onClick = onDateChange
+            )
+        }
 
         if (onScheduledDateChange != null) {
             Spacer(modifier = Modifier.height(8.dp))
