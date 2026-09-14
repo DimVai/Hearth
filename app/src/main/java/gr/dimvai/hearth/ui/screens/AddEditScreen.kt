@@ -7,6 +7,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
@@ -154,9 +155,9 @@ fun EditScreen(
                             .height(56.dp),
                         contentPadding = PaddingValues(0.dp)
                     ) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                        Icon(Icons.Default.Check, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Επιστροφή", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
+                        Text("OK", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -211,23 +212,6 @@ fun ConnectionForm(
         Text("Συχνότητα επικοινωνίας", style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
         FrequencySelector(selectedDays = frequencyDays, onFrequencyChange = onFrequencyChange)
 
-        HearthDatePicker(
-            label = "Τελευταία επικοινωνία",
-            selectedDate = lastCommunicationDate,
-            onDateChange = onDateChange
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            QuickDateButton(
-                label = "Σήμερα",
-                date = LocalDate.now(),
-                onClick = onDateChange
-            )
-        }
-
         if (onScheduledDateChange != null) {
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -276,9 +260,37 @@ fun ConnectionForm(
                             date = (scheduledNextDate ?: today).plusDays(1),
                             onClick = onScheduledDateChange
                         )
+                        OutlinedButton(
+                            onClick = { onScheduledDateChange(null) },
+                            contentPadding = PaddingValues(horizontal = 12.dp),
+                            modifier = Modifier.height(36.dp),
+                            border = BorderStroke(1.dp, PrimaryExLight.copy(alpha = 0.5f)),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                contentColor = PrimaryExLight
+                            )
+                        ) {
+                            Text("Χωρίς", style = MaterialTheme.typography.labelMedium)
+                        }
                     }
                 }
             }
+        }
+
+        HearthDatePicker(
+            label = "Τελευταία επικοινωνία",
+            selectedDate = lastCommunicationDate,
+            onDateChange = onDateChange
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            QuickDateButton(
+                label = "Σήμερα",
+                date = LocalDate.now(),
+                onClick = onDateChange
+            )
         }
     }
 }
@@ -306,6 +318,7 @@ fun FrequencySelector(selectedDays: Int, onFrequencyChange: (Int) -> Unit) {
         2 to "Κάθε 2 μέρες",
         7 to "Κάθε εβδομάδα",
         14 to "Κάθε 2 εβδομάδες",
+        21 to "Κάθε 3 εβδομάδες",
         30 to "Κάθε μήνα",
         60 to "Κάθε 2 μήνες"
     )
