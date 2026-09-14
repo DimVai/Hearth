@@ -320,7 +320,8 @@ fun FrequencySelector(selectedDays: Int, onFrequencyChange: (Int) -> Unit) {
         14 to "Κάθε 2 εβδομάδες",
         21 to "Κάθε 3 εβδομάδες",
         30 to "Κάθε μήνα",
-        60 to "Κάθε 2 μήνες"
+        60 to "Κάθε 2 μήνες",
+        0 to "Ad hoc"
     )
 
     var expanded by remember { mutableStateOf(false) }

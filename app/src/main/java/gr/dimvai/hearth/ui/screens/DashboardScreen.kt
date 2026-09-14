@@ -195,6 +195,7 @@ fun ConnectionCard(
                 
                 val daysUntil = connection.getDaysUntilNext()
                 val nextCommText = when {
+                    (connection.frequencyDays == 0 && connection.scheduledNextDate == null) -> "Ad hoc"
                     daysUntil < 0 -> "Εκπρόθεσμο (${-daysUntil} μέρες)"
                     daysUntil == 0L -> "Σήμερα"
                     daysUntil == 1L -> "Αύριο"

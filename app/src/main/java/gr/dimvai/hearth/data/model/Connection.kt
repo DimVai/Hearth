@@ -40,6 +40,9 @@ data class Connection(
      */
     fun calculateNextCommunicationDate(): LocalDate {
         scheduledNextDate?.let { return it }
+        if (frequencyDays == 0) {
+            return LocalDate.of(9999, 12, 31)
+        }
         
         val baseDate = lastCommunicationDate ?: createdAt
         return baseDate.plusDays(frequencyDays.toLong())
@@ -59,6 +62,7 @@ data class Connection(
 
     fun getFrequencyLabel(): String {
         return when (frequencyDays) {
+            0 -> "Ad hoc"
             1 -> "Κάθε μέρα"
             2 -> "Κάθε 2 μέρες"
             7 -> "Κάθε εβδομάδα"
